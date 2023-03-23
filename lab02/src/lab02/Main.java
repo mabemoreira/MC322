@@ -14,7 +14,7 @@ public class Main {
 		System.out.println(c2.toString());// imprimi os 2 para ver o que mudou 
 		Veiculo v1 = new Veiculo("937-G5R", "Jeep", "Wrangler");
 		System.out.println(v1.toString());
-		Sinistro s1 = new Sinistro ("26/10/2000", "Hartford - CT");
+		Sinistro s1 = new Sinistro ("21/12/1961", "rua pitagoras");
 		System.out.println(s1.toString());
 		Seguradora sa = new Seguradora("nos Trinques", "707070", "nostrinquesarrobadominionaomepatrocinou.com", "no seu coracao");
 		System.out.println(sa); 
