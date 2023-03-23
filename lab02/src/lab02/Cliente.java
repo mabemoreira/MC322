@@ -81,7 +81,7 @@ public class Cliente {
 		cpfTeste = cpfTeste.replaceAll("[^\\d]","");
 		if(cpfTeste.length() != 11)
 			return false;
-		for(int i = 1; i < 11; i++) {
+		for(int i = 1; i < 11; i++) { // acredito que um cpf completamente igual nao passaria no teste numerico, mas o lab pedia especificamente para testar se todos eram iguais
 			if (cpfTeste.charAt(i) == base)
 				cont++;
 		}
