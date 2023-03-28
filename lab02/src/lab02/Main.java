@@ -9,7 +9,7 @@ public class Main {
 		System.out.println(c2.toString());// imprimi os 2 sem mudar nada
 		c1.setEndereco("New Haven-CT");
 		c1.setNome("A. Gilmore"); 
-		c1.setCpf("111.444.777.35");// mudei só 1 objeto
+		c1.setCpf("111.444.777-35");// mudei só 1 objeto
 		System.out.println(c1.toString());
 		System.out.println(c2.toString());// imprimi os 2 para ver o que mudou 
 		Veiculo v1 = new Veiculo("937-G5R", "Jeep", "Wrangler");

@@ -39,7 +39,7 @@ public class Sinistro {
 	}
 	
 	public String toString() {
-	return "O acidente ocorreu em " + data + " no endereco " + endereco + " e possui o id " + id + ".\n";
+	return "O acidente ocorreu em " + data + " no endereco " + endereco + " e possui o id " + id + ".";
 	}
 	
 }

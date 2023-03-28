@@ -34,7 +34,7 @@ public class Cliente {
 		if(validarCPF(cpf))
 			this.cpf = cpf;
 		else
-			this.cpf = "cliente forneceu cpf invalido";
+			this.cpf = "cliente forneceu cpf invalido.";
 	}
 	public String getDataNascimento() {
 		return dataNascimento;
@@ -58,7 +58,7 @@ public class Cliente {
 	public String toString() {
 		if(validarCPF(cpf))
 			return "O nome do cliente eh " + nome + " e ele tem " + idade + " anos, dado que seu aniversario eh em " + dataNascimento +"."
-				+ "Seu endereco e cpf sao, respectivamente: " + endereco + " e " + cpf.replaceAll("[^\\d]","")+ ".\n";
+				+ "Seu endereco e cpf sao, respectivamente: " + endereco + " e " + cpf.replaceAll("[^\\d]","")+ ".";
 		else 
 			return "O nome do cliente eh " + nome + " e ele tem " + idade + " anos, dado que seu aniversario eh em " + dataNascimento +"."
 			+ "Seu endereco eh: " + endereco + ". Contudo, alerta: " + cpf;

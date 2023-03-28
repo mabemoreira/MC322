@@ -41,6 +41,6 @@ public class Seguradora {
 	
 	public String toString() {
 		return "A seguradora " + nome + " localizada em " + endereco + " pode ser contatada pelo email " + email + " ou "
-				+ "pelo telefone " + telefone + ".\n";
+				+ "pelo telefone " + telefone + ".";
 	}
 }
