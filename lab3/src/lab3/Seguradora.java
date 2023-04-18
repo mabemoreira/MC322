@@ -1,8 +1,6 @@
 package lab3;
 import java.util.HashMap;
 
-
-
 public class Seguradora {
 	private String nome;
 	private String telefone;
@@ -79,28 +77,34 @@ public class Seguradora {
 		return teste == null ? false : true; // tentou remover um cliente que não existe 
 	}
 
-	public void listarClientes(String tipoCliente) {
+	public String listarClientes(String tipoCliente) {
+		total = ""
 		if(tipoCliente.equals("PJ")) {
 			for(Cliente value : mapaClientes.values()) {
 				if(value instanceof ClientePJ) {
-					System.out.println(value);
+					total.concat(value.toString());
+					total.concat(" ");
 				}
 			}
 		}
 		else if(tipoCliente.equals("PF")) {
 			for(Cliente value : mapaClientes.values()) {
 				if(value instanceof ClientePF) {
-					System.out.println(value);
+					total.concat(value.toString());
+					total.concat(" ");
 				}
 		}
 	}
-
+	return total.equals("")? "nao ha clientes desse tipo" : total;
 }
 	
-	public void listarSinistros() {
+	public String listarSinistros() {
+		String total = ""
 		for(Sinistro value : mapaSinistros.values()) {
-			System.out.println(value);
+			total.concat(value.toString());
+			total.concat(" ");
 		}
+		return total.equals("")? "nao ha sinistros" : total;
 	}
 	
 	public boolean gerarSinistro(String data, String endereco, Veiculo veiculo, Cliente cliente) {
@@ -110,25 +114,41 @@ public class Seguradora {
 	}
 	
 	public boolean visualizarSinistro(String cliente) {
+		System.out.println(" O(s) sinistro(s) da seguradora " + this.toString(1) + " correspondente(s) a sua pesquisa sao: ");
 		for(Sinistro value: mapaSinistros.values()) {
 			if(value.getCliente() instanceof ClientePF){
 				ClientePF clientecast = (ClientePF) value.getCliente();
 				if(clientecast.getCPF().equals(cliente)) {
-				System.out.println(value);
-				return true;
+					System.out.println(value.toString(0));
+					return true;
 			}
 			else if (value.getCliente() instanceof ClientePJ) {
 				ClientePJ clientecasted = (ClientePJ) value.getCliente();
 				if(clientecasted.getCNPJ().equals(cliente)) {
-				System.out.println(value);
-				return true;
+					System.out.println(value.toString(0));
+					return true;
 			}
 		}
 	}
 }
+		System.out.println("Não foram encontrados Sinistros pertencentes a essa pessoa");
 				return false; /// mandou um cnpj/ cpf invalido ou nao cadastrado
 }
+	public String toString() {
+		return "A seguradora " + nome + " de telefone " + telefone + " localizada no endereco " + endereco + " com email "
+				+ email + " possui os seguintes clientes pessoa física: " + this.listarClientes(PF) + " e os seguintes clientes do tipo pessoa juridica: "
+				+this.listarClientes(PJ) + " entre ambos os tipos, possui os seguintes sinistros: " + this.listarSinistros();
+	}
 	
+	public String toString(int sobrecarga) {
+		if(sobrecarga == 1) 
+			return "A seguradora " + nome + " de telefone " + telefone + " localizada no endereco " + endereco + " com email "
+					+ email + " possui os seguintes clientes pessoa física: " + this.listarClientes(PF) + " e os seguintes clientes do tipo pessoa juridica: "
+					+this.listarClientes(PJ); // só para nao entrar no loop infinito de sinistro chamando seguradora
+		
+		else 
+			return this.toString();
+	}
 	
 }
 	

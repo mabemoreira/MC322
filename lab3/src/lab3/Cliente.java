@@ -35,10 +35,10 @@ public class Cliente {
 	public String listarVeiculos() {
 		String total ="";
 		for(Veiculo value: mapaVeiculos.values()) {
+			total.concat(this.toString());
 			total.concat(" ");
-			total.concat(value.toString());
 		}
-		return total;
+		return total.equals("")? "nao ha veiculos" : total;
 	}
 	
 	public boolean adicionaVeiculo(Veiculo carro) {
@@ -50,4 +50,9 @@ public class Cliente {
 	Veiculo teste =	mapaVeiculos.remove(placa);
 	return teste == null ? false : true; 
 	}
+	
+	public String toString() {
+		" O cliente " + nome + " que reside em " + endereco + " possui o(s) seguinte(s) veiculo(s): " + this.listarVeiculos();
+	}
+	
 }

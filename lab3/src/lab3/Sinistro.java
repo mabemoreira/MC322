@@ -76,7 +76,15 @@ public class Sinistro {
 	}
 	
 	public String toString() {
-		return "O sinistro de ID " + ID + " ocorreu em " + data + " com um veiculo " + veiculo + " que pertence a " + cliente + " assegurado por " + seguradora;
+		return "O sinistro de ID " + ID + " ocorreu em " + data + " com um veiculo " + veiculo + " que pertence a " + cliente
+				+ " é assegurado pela seguradora " + seguradora;
 	}
-
+// dava p/ fazer sem o segundo to string se o sinistro so fosse impresso dentro de seguradora
+	
+	public String toString(int sobrecarga) {
+		if(sobrecarga == 0)
+			return "O sinistro de ID " + ID + " ocorreu em " + data + " com um veiculo " + veiculo + " que pertence a " + cliente;
+		else 
+			return this.toString();
+	}
 }
