@@ -32,6 +32,15 @@ public class Cliente {
 		return mapaVeiculos;
 	}
 	
+	public String listarVeiculos() {
+		String total ="";
+		for(Veiculo value: mapaVeiculos.values()) {
+			total.concat(" ");
+			total.concat(value.toString());
+		}
+		return total;
+	}
+	
 	public boolean adicionaVeiculo(Veiculo carro) {
 		mapaVeiculos.put(carro.getPlaca(), carro);
 		return true;

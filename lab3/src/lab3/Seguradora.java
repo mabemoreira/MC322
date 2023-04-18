@@ -1,7 +1,7 @@
 package lab3;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Random;
+
+
 
 public class Seguradora {
 	private String nome;
@@ -61,12 +61,18 @@ public class Seguradora {
 	}
 	
 	public boolean cadastrarCliente (Cliente cliente) {
-		if(cliente.getClass() == ClientePF.class)
-			mapaClientes.put(cliente.getCPF(), cliente);
-		else // o lab me garante que todos sao pf ou pj
-			mapaClientes.put(cliente.getCNPJ(), cliente);
+		if(cliente instanceof ClientePF) {
+			ClientePF clientecast = (ClientePF) cliente;
+			mapaClientes.put(clientecast.getCPF(), clientecast);
+			return true;
+		}
+		else if(cliente instanceof ClientePJ) { // o lab me garante que todos sao pf ou pj
+			ClientePJ clientecast = (ClientePJ) cliente;
+			mapaClientes.put(clientecast.getCNPJ(), clientecast);
 		return true;
 	}
+	return false; //nunca será usado nesse lab pq tds sao pf ou pj mas está aqui
+}
 	
 	public boolean removerCliente(String CPFouCNPJCliente) { // tem que receber o cpf, pq se nao podem ter 2 joao da silva e como saber qual remover nesse caso?
 		Cliente teste = mapaClientes.remove(CPFouCNPJCliente);
@@ -103,4 +109,27 @@ public class Seguradora {
 		return true;
 	}
 	
+	public boolean visualizarSinistro(String cliente) {
+		for(Sinistro value: mapaSinistros.values()) {
+			if(value.getCliente() instanceof ClientePF){
+				ClientePF clientecast = (ClientePF) value.getCliente();
+				if(clientecast.getCPF().equals(cliente)) {
+				System.out.println(value);
+				return true;
+			}
+			else if (value.getCliente() instanceof ClientePJ) {
+				ClientePJ clientecasted = (ClientePJ) value.getCliente();
+				if(clientecasted.getCNPJ().equals(cliente)) {
+				System.out.println(value);
+				return true;
+			}
+		}
+	}
 }
+				return false; /// mandou um cnpj/ cpf invalido ou nao cadastrado
+}
+	
+	
+}
+	
+	

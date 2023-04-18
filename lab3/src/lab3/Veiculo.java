@@ -33,6 +33,7 @@ public class Veiculo {
 		return anoFabricacao;
 	}
 	
+	
 	public String toString() {
 		return "o veiculo de placa " + placa + " da marca " + marca + " de modelo " + modelo + " que foi fabricado em " + anoFabricacao;
 	}

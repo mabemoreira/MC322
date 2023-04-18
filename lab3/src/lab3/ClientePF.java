@@ -96,6 +96,6 @@ public class ClientePF extends Cliente{
 
 	public String toString() {
 		return "o cliente " + this.getNome() + " de genero " + genero + " nascido em " + dataNascimento + " possui o CPF " + CPF + " tirou sua habilitacao em " + dataLicenca + " tem até nivel " 
-				+ educacao + " é da classe economica " + classeEconomica + " e mora em " + this.getEndereco();
+				+ educacao + " é da classe economica " + classeEconomica + " mora em " + this.getEndereco() + " e possui veiculo(s) " + this.listarVeiculos(); // pq deu errado??
 	}
 }
