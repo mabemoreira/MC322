@@ -35,7 +35,7 @@ public class Cliente {
 	public String listarVeiculos() {
 		String total ="";
 		for(Veiculo value: mapaVeiculos.values()) {
-			total.concat(this.toString());
+			total.concat(value.toString());
 			total.concat(" ");
 		}
 		return total.equals("")? "nao ha veiculos" : total;
@@ -52,7 +52,7 @@ public class Cliente {
 	}
 	
 	public String toString() {
-		" O cliente " + nome + " que reside em " + endereco + " possui o(s) seguinte(s) veiculo(s): " + this.listarVeiculos();
+	return	" O cliente " + nome + " que reside em " + endereco + " possui o(s) seguinte(s) veiculo(s): " + this.listarVeiculos();
 	}
 	
 }

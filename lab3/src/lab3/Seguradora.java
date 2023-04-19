@@ -74,11 +74,11 @@ public class Seguradora {
 	
 	public boolean removerCliente(String CPFouCNPJCliente) { // tem que receber o cpf, pq se nao podem ter 2 joao da silva e como saber qual remover nesse caso?
 		Cliente teste = mapaClientes.remove(CPFouCNPJCliente);
-		return teste == null ? false : true; // tentou remover um cliente que não existe 
+		return(!(teste == null));// tentou remover um cliente que não existe 
 	}
 
 	public String listarClientes(String tipoCliente) {
-		total = ""
+		String total = "";
 		if(tipoCliente.equals("PJ")) {
 			for(Cliente value : mapaClientes.values()) {
 				if(value instanceof ClientePJ) {
@@ -99,7 +99,7 @@ public class Seguradora {
 }
 	
 	public String listarSinistros() {
-		String total = ""
+		String total = "";
 		for(Sinistro value : mapaSinistros.values()) {
 			total.concat(value.toString());
 			total.concat(" ");
@@ -136,15 +136,15 @@ public class Seguradora {
 }
 	public String toString() {
 		return "A seguradora " + nome + " de telefone " + telefone + " localizada no endereco " + endereco + " com email "
-				+ email + " possui os seguintes clientes pessoa física: " + this.listarClientes(PF) + " e os seguintes clientes do tipo pessoa juridica: "
-				+this.listarClientes(PJ) + " entre ambos os tipos, possui os seguintes sinistros: " + this.listarSinistros();
+				+ email + " possui os seguintes clientes pessoa física: " + this.listarClientes("PF") + " e os seguintes clientes do tipo pessoa juridica: "
+				+this.listarClientes("PJ") + " entre ambos os tipos, possui os seguintes sinistros: " + this.listarSinistros();
 	}
 	
 	public String toString(int sobrecarga) {
 		if(sobrecarga == 1) 
 			return "A seguradora " + nome + " de telefone " + telefone + " localizada no endereco " + endereco + " com email "
-					+ email + " possui os seguintes clientes pessoa física: " + this.listarClientes(PF) + " e os seguintes clientes do tipo pessoa juridica: "
-					+this.listarClientes(PJ); // só para nao entrar no loop infinito de sinistro chamando seguradora
+					+ email + " possui os seguintes clientes pessoa física: " + this.listarClientes("PF") + " e os seguintes clientes do tipo pessoa juridica: "
+					+this.listarClientes("PJ"); // só para nao entrar no loop infinito de sinistro chamando seguradora
 		
 		else 
 			return this.toString();

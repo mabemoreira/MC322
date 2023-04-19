@@ -13,7 +13,7 @@ public class ClientePF extends Cliente{
 		super(nome, endereco);
 		this.CPF = CPF;
 		this.setDataNascimento(dataNascimento);
-		this.setGenero(genero);
+		this.setGenero(genero); 
 		this.setEducacao(educacao);
 		this.setDataLicenca(dataLicenca);
 		this.setClasseEconomica(classeEconomica);

@@ -7,7 +7,7 @@ public class Veiculo {
 	private int anoFabricacao;
 	
 	public Veiculo(String placa, String marca, String modelo, int anoFabricacao) {
-		this.setPlaca(placa);
+		this.placa = placa;
 		this.marca = marca;
 		this.modelo = modelo;
 		this.anoFabricacao = anoFabricacao;

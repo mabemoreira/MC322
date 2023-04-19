@@ -7,7 +7,7 @@ public class ClientePJ  extends Cliente {
 	private final String CNPJ;
 	private Date dataFundacao;
 	
-	public ClientePJ(String CNPJ, Date dataFundacao, String nome, String endereco) throws Exception{
+	public ClientePJ(String CNPJ, Date dataFundacao, String nome, String endereco){
 		super(nome,endereco);
 		this.CNPJ = CNPJ;
 		this.dataFundacao = dataFundacao;
@@ -58,7 +58,7 @@ public class ClientePJ  extends Cliente {
 	
 	public String toString() {		
 		return "a pessoa física de nome " + this.getNome() + " e endereco " + this.getEndereco() + " foi fundada em " + dataFundacao + " e possui CNPJ " + CNPJ
-				+ " e possui o(s) seguinte(s) veiculo(s) " + super.listarVeiculos() // nao sei se isso funciona, vou testar  ;
+				+ " e possui o(s) seguinte(s) veiculo(s) " + super.listarVeiculos(); // nao sei se isso funciona, vou testar  ;
 		}
 	
 	
