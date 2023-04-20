@@ -114,25 +114,28 @@ public class Seguradora {
 	}
 	
 	public boolean visualizarSinistro(String cliente) {
+		boolean flag = false;
 		System.out.println(" O(s) sinistro(s) da seguradora " + this.toString(1) + " correspondente(s) a sua pesquisa sao: ");
 		for(Sinistro value: mapaSinistros.values()) {
 			if(value.getCliente() instanceof ClientePF){
 				ClientePF clientecast = (ClientePF) value.getCliente();
 				if(clientecast.getCPF().equals(cliente)) {
 					System.out.println(value.toString(0));
-					return true;
+					flag = true;
 			}
 			else if (value.getCliente() instanceof ClientePJ) {
 				ClientePJ clientecasted = (ClientePJ) value.getCliente();
 				if(clientecasted.getCNPJ().equals(cliente)) {
 					System.out.println(value.toString(0));
-					return true;
+					flag = true; // fiz isso ao inves de retornar pq pode ter varios sinistros da mesma pessoa
 			}
 		}
 	}
 }
-		System.out.println("Não foram encontrados Sinistros pertencentes a essa pessoa");
-				return false; /// mandou um cnpj/ cpf invalido ou nao cadastrado
+		if(flag == false)
+			System.out.println("Não foram encontrados Sinistros pertencentes a essa pessoa"); /// mandou um cnpj/ cpf invalido ou nao cadastrado
+	    return flag;
+		
 }
 	public String toString() {
 		return "A seguradora " + nome + " de telefone " + telefone + " localizada no endereco " + endereco + " com email "

@@ -1,5 +1,6 @@
 package lab3;
 import java.util.Scanner;
+import java.util.HashMap;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
@@ -53,6 +54,7 @@ public class Main {
 		enderecoCliente = enderecoCliente.replace("\n","");
 		System.out.println("Qual o CNPJ dele?");
 		String CNPJCliente = entrada.nextLine();
+		CNPJCliente = CNPJCliente.replace("\n","");
 		if(!ClientePJ.validaCNPJ(CNPJCliente)) {
 			System.out.println("Cliente com CNPJ invalido! tente cadastrar outro cliente");
 			entrada.close();
@@ -82,7 +84,77 @@ public class Main {
 		
 	}
 	
-	
+	public static boolean criaSinistro(Seguradora seguradora) throws Exception{
+		boolean flag = false;
+		Scanner entrada = new Scanner(System.in);
+		System.out.println("Quando ocorreu o sinistro?");
+		String data = entrada.nextLine();
+		data = data.replace("\n","");
+		System.out.println("Onde ocorreu o sinistro?");
+		String endereco = entrada.nextLine();
+		endereco = endereco.replace("\n","");
+		System.out.println("Se o sinistro ocorreu com um cliente ja cadastrado na seguradora, aperte 1, se nao, aperte 2 para cadastra-lo");
+		int prox = entrada.nextInt();
+		Cliente cliente = null;
+		Veiculo veiculo = null;
+		if(prox == 1) {
+			flag = true;
+			System.out.println("Insira o cpf/cnpj do cliente para localiza-lo");
+			String id = entrada.nextLine();
+			id = id.replace("\n", "");
+			System.out.println("Insira a placa do veiculo para localiza-lo");
+			String placa = entrada.nextLine();
+			placa = placa.replace("\n", "");
+			for(Cliente value: seguradora.getMapaClientes().values()) {
+				if(value instanceof ClientePF) {
+					ClientePF valuecast = (ClientePF) value;
+					if(valuecast.getCPF().equals(id)) {
+						cliente = valuecast;
+						for(Veiculo valor: valuecast.getMapaVeiculos().values()) {
+							if(valor.getPlaca().equals(placa))
+								veiculo = valor;
+						}
+					}
+				}
+				else if(value instanceof ClientePJ) {
+					ClientePJ valuecast = (ClientePJ) value;
+					if(valuecast.getCNPJ().equals(id)) {
+						cliente = valuecast;
+						for(Veiculo valor: valuecast.getMapaVeiculos().values()) {
+							if(valor.getPlaca().equals(placa))
+								veiculo = valor;
+						}
+					}
+				}
+			}
+		}
+		else if(prox == 2) {
+			flag = true;
+			System.out.println("Aperte '3' para cliente pessoa fisica e '4' para cliente pessoa juridica");
+			System.out.println("Insira a placa do veiculo para localiza-lo");
+			String novaplaca = entrada.nextLine();
+			novaplaca = novaplaca.replace("\n", "");
+			int next = entrada.nextInt();
+			if(next == 3) {
+				cliente = criaClientePF(seguradora);
+				for(Veiculo value: cliente.getMapaVeiculos().values()) {
+					if(value.getPlaca().equals(novaplaca))
+						veiculo = value;  // o eclipse reclama se eu nao repetir codigo ???? ele reclama se eu colocar isso dps do if
+			}
+			}
+			else if(next == 4) {
+				cliente = criaClientePJ(seguradora);
+				for(Veiculo value: cliente.getMapaVeiculos().values()) {
+					if(value.getPlaca().equals(novaplaca))
+						veiculo = value; 
+			}
+				
+		}
+		}
+		boolean certo = seguradora.gerarSinistro(data, endereco, veiculo, cliente);
+		entrada.close();
+		return certo;
+	}
 	
 	public static ClientePF criaClientePF(Seguradora seguradora) throws Exception {
 		Scanner entrada = new Scanner(System.in);
@@ -94,6 +166,7 @@ public class Main {
 		enderecoCliente = enderecoCliente.replace("\n","");
 		System.out.println("Qual o CPF dele?");
 		String CPFCliente = entrada.nextLine();
+		CPFCliente = CPFCliente.replace("\n","");
 		if(!ClientePF.validarCPF(CPFCliente)) {
 			System.out.println("Cliente com CPF invalido! tente cadastrar outro cliente");
 			entrada.close();
@@ -137,6 +210,8 @@ public class Main {
 	}
 	
 	public static void main(String args[]) throws Exception {
+		int contador_criados = 0;
+		int contador_removidos = 0;
 		Scanner entrada = new Scanner(System.in);
 		System.out.println("Ola! seja bem vindo ao seu portal de seguradora! para criar sua seguradora, aperte '1'");
 		int inicio = entrada.nextInt();
@@ -151,10 +226,12 @@ public class Main {
 		switch(proximo) {
 		case 1:
 			cliente = criaClientePF(seguradora);
+			contador_criados++;
 			if(cliente != null)
 				break;
 		case 2:
 			cliente = criaClientePJ(seguradora);
+			contador_criados++;
 			if(cliente != null)
 				break;
 		case 3:
@@ -162,8 +239,40 @@ public class Main {
 		default:
 			System.out.println("Tente novamente");
 	}
-		System.out.println("Para adicionar uma ocorrencia de Sinistro, aperte '1' e para voltar aperte '2' ");
-		
-		entrada.close();
-}
+		System.out.println("Para adicionar uma ocorrencia de Sinistro associado a sua seguradora mais recente, aperte '1' e para voltar aperte '2' ");
+			proximo = entrada.nextInt();
+			boolean deuCerto;
+			switch(proximo) {
+			case 1:
+				deuCerto = criaSinistro(seguradora);
+				break;
+			case 2:
+				break;
+			}
+			
+		System.out.println("Para listar os sinistros de sua seguradora mais recente, digite '1', para visualizar um especifico, digite '2', para listar clientes de certo tipo digite '3',  para remover clientes, '4' e para voltar, '5");
+		int mais = entrada.nextInt();
+		switch(mais){
+		case 1:
+			seguradora.listarSinistros();
+				break;
+		case 2:
+			System.out.println("Digite o cpf/cnpj do cliente cujo sinistro quer ver");
+			String id = entrada.nextLine();
+			id = id.replace("\n", "");
+			seguradora.visualizarSinistro(id);
+		case 3:
+			System.out.println("Digite o tipo de cliente (PF/PJ)");
+			String tipo = entrada.nextLine();
+			tipo = tipo.replace("\n", "");
+			seguradora.listarClientes(tipo);
+		case 4:
+			System.out.println("Digite o cpf/cnpj do cliente que quer remover");
+			 id = entrada.nextLine();
+			id = id.replace("\n", "");
+			seguradora.removerCliente(id);
+			contador_removidos++;
+		}
+	}
+
 }
