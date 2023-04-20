@@ -36,7 +36,7 @@ public class Cliente {
 		String total ="";
 		for(Veiculo value: mapaVeiculos.values()) {
 			total.concat(value.toString());
-			total.concat(" ");
+			total.concat("\n");
 		}
 		return total.equals("")? "nao ha veiculos" : total;
 	}

@@ -83,7 +83,7 @@ public class Seguradora {
 			for(Cliente value : mapaClientes.values()) {
 				if(value instanceof ClientePJ) {
 					total.concat(value.toString());
-					total.concat(" ");
+					total.concat("\n");
 				}
 			}
 		}
@@ -91,7 +91,7 @@ public class Seguradora {
 			for(Cliente value : mapaClientes.values()) {
 				if(value instanceof ClientePF) {
 					total.concat(value.toString());
-					total.concat(" ");
+					total.concat("\n");
 				}
 		}
 	}
@@ -102,7 +102,7 @@ public class Seguradora {
 		String total = "";
 		for(Sinistro value : mapaSinistros.values()) {
 			total.concat(value.toString());
-			total.concat(" ");
+			total.concat("\n");
 		}
 		return total.equals("")? "nao ha sinistros" : total;
 	}
@@ -139,8 +139,8 @@ public class Seguradora {
 }
 	public String toString() {
 		return "A seguradora " + nome + " de telefone " + telefone + " localizada no endereco " + endereco + " com email "
-				+ email + " possui os seguintes clientes pessoa física: " + this.listarClientes("PF") + " e os seguintes clientes do tipo pessoa juridica: "
-				+this.listarClientes("PJ") + " entre ambos os tipos, possui os seguintes sinistros: " + this.listarSinistros();
+				+ email + " possui os seguintes clientes pessoa física:\n " + this.listarClientes("PF") + " e os seguintes clientes do tipo pessoa juridica:\n "
+				+this.listarClientes("PJ") + " entre ambos os tipos, possui os seguintes sinistros:\n" + this.listarSinistros();
 	}
 	
 	public String toString(int sobrecarga) {

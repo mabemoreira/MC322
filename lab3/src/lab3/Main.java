@@ -1,13 +1,11 @@
 package lab3;
 import java.util.Scanner;
-import java.util.HashMap;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
 public class Main {
 	
-	public static Seguradora criaSeguradora() {
-		Scanner entrada = new Scanner(System.in);
+	public static Seguradora criaSeguradora(Scanner entrada) {
 		System.out.println("Otimo! qual o nome da sua seguradora?");
 		String nomeSeguradora = entrada.nextLine();
 		nomeSeguradora = nomeSeguradora.replace("\n","");
@@ -21,12 +19,10 @@ public class Main {
 		String emailSeguradora = entrada.nextLine();
 		emailSeguradora = emailSeguradora.replace("\n","");
 		Seguradora seguradora = new Seguradora(nomeSeguradora, telefoneSeguradora, emailSeguradora, enderecoSeguradora);
-		entrada.close();
 		return seguradora;
 	}
 	
-	public static Veiculo criaVeiculo() {
-		Scanner entrada = new Scanner(System.in);
+	public static Veiculo criaVeiculo(Scanner entrada) {
 		System.out.println("Qual a placa do veiculo?");
 		String placa = entrada.nextLine();
 		placa = placa.replace("\n","");
@@ -39,13 +35,11 @@ public class Main {
 		System.out.println("Em que ano ele foi fabricado?");
 		int anoFabricacao = entrada.nextInt();
 		Veiculo veiculo = new Veiculo(placa, marca, modelo, anoFabricacao);
-		entrada.close();
 		return veiculo;
 	}
 	
 	
-	public static ClientePJ criaClientePJ(Seguradora seguradora) throws Exception{
-		Scanner entrada = new Scanner(System.in);
+	public static ClientePJ criaClientePJ(Seguradora seguradora, Scanner entrada) throws Exception{
 		System.out.println("Qual o nome do seu cliente?");
 		String nomeCliente = entrada.nextLine();
 		nomeCliente = nomeCliente.replace("\n","");
@@ -57,7 +51,6 @@ public class Main {
 		CNPJCliente = CNPJCliente.replace("\n","");
 		if(!ClientePJ.validaCNPJ(CNPJCliente)) {
 			System.out.println("Cliente com CNPJ invalido! tente cadastrar outro cliente");
-			entrada.close();
 			return null;
 		}
 		System.out.println("Quando a empresa foi fundada? (dd/MM/yyyy)");
@@ -71,22 +64,28 @@ public class Main {
 		System.out.println("Para cadastrar um novo veiculo para seu cliente, aperte '1', se estiver satisfeito, aperte '0'");
 		cadastro = entrada.nextInt();
 		if(cadastro == 1) {
-			Veiculo veiculo = criaVeiculo();
+			Veiculo veiculo = criaVeiculo(entrada);
 			cliente.adicionaVeiculo(veiculo);}
 		}while(cadastro != 0);
 		if(seguradora.cadastrarCliente(cliente)){
 			System.out.println("Seu cliente foi cadastrado na seguradora com sucesso");
-			entrada.close();
 			return cliente;
 		}
-		entrada.close();
 		return cliente;
 		
 	}
 	
-	public static boolean criaSinistro(Seguradora seguradora) throws Exception{
+	public static Veiculo encontraCarro(Cliente cliente, String placa) {
+		Veiculo veiculo = null;
+		for(Veiculo valor: cliente.getMapaVeiculos().values()) {
+			if(valor.getPlaca().equals(placa))
+				veiculo = valor;
+		}
+		return veiculo;
+	}
+	
+	public static void criaSinistro(Seguradora seguradora, Scanner entrada) throws Exception{
 		boolean flag = false;
-		Scanner entrada = new Scanner(System.in);
 		System.out.println("Quando ocorreu o sinistro?");
 		String data = entrada.nextLine();
 		data = data.replace("\n","");
@@ -110,20 +109,14 @@ public class Main {
 					ClientePF valuecast = (ClientePF) value;
 					if(valuecast.getCPF().equals(id)) {
 						cliente = valuecast;
-						for(Veiculo valor: valuecast.getMapaVeiculos().values()) {
-							if(valor.getPlaca().equals(placa))
-								veiculo = valor;
-						}
+						veiculo = encontraCarro(valuecast, placa);
 					}
 				}
 				else if(value instanceof ClientePJ) {
 					ClientePJ valuecast = (ClientePJ) value;
 					if(valuecast.getCNPJ().equals(id)) {
 						cliente = valuecast;
-						for(Veiculo valor: valuecast.getMapaVeiculos().values()) {
-							if(valor.getPlaca().equals(placa))
-								veiculo = valor;
-						}
+						veiculo = encontraCarro(valuecast, placa);
 					}
 				}
 			}
@@ -136,28 +129,17 @@ public class Main {
 			novaplaca = novaplaca.replace("\n", "");
 			int next = entrada.nextInt();
 			if(next == 3) {
-				cliente = criaClientePF(seguradora);
-				for(Veiculo value: cliente.getMapaVeiculos().values()) {
-					if(value.getPlaca().equals(novaplaca))
-						veiculo = value;  // o eclipse reclama se eu nao repetir codigo ???? ele reclama se eu colocar isso dps do if
-			}
+				cliente = criaClientePF(seguradora, entrada);
 			}
 			else if(next == 4) {
-				cliente = criaClientePJ(seguradora);
-				for(Veiculo value: cliente.getMapaVeiculos().values()) {
-					if(value.getPlaca().equals(novaplaca))
-						veiculo = value; 
-			}
-				
+				cliente = criaClientePJ(seguradora,entrada);
 		}
+			veiculo = encontraCarro(cliente, novaplaca);
 		}
-		boolean certo = seguradora.gerarSinistro(data, endereco, veiculo, cliente);
-		entrada.close();
-		return certo;
+	 seguradora.gerarSinistro(data, endereco, veiculo, cliente);
 	}
 	
-	public static ClientePF criaClientePF(Seguradora seguradora) throws Exception {
-		Scanner entrada = new Scanner(System.in);
+	public static ClientePF criaClientePF(Seguradora seguradora, Scanner entrada) throws Exception {
 		System.out.println("Qual o nome do seu cliente?");
 		String nomeCliente = entrada.nextLine();
 		nomeCliente = nomeCliente.replace("\n","");
@@ -169,7 +151,6 @@ public class Main {
 		CPFCliente = CPFCliente.replace("\n","");
 		if(!ClientePF.validarCPF(CPFCliente)) {
 			System.out.println("Cliente com CPF invalido! tente cadastrar outro cliente");
-			entrada.close();
 			return null;
 		}
 		System.out.println("Qual o aniversario dele? (dd/MM/yyyy)");
@@ -196,62 +177,51 @@ public class Main {
 		do {
 		System.out.println("Para cadastrar um novo veiculo para seu cliente, aperte '1', se estiver satisfeito, aperte '0'");
 		cadastro = entrada.nextInt();
+		entrada.nextLine(); //come o \n;
 		if(cadastro == 1) {
-			Veiculo veiculo = criaVeiculo();
+			Veiculo veiculo = criaVeiculo(entrada);
 			cliente.adicionaVeiculo(veiculo);}
 		}while(cadastro != 0);
 		if(seguradora.cadastrarCliente(cliente)){
 			System.out.println("Seu cliente foi cadastrado na seguradora com sucesso");
-			entrada.close();
 			return cliente;
 		}
-		entrada.close();
 		return cliente; // nunca vai chegar aqui nesse lab mas quem sabe no proximo
 	}
 	
-	public static void main(String args[]) throws Exception {
-		int contador_criados = 0;
-		int contador_removidos = 0;
-		Scanner entrada = new Scanner(System.in);
+	
+	public static Seguradora startSeguradora(Scanner entrada) {
 		System.out.println("Ola! seja bem vindo ao seu portal de seguradora! para criar sua seguradora, aperte '1'");
 		int inicio = entrada.nextInt();
-		do {
-			System.out.println("Tente novamente");
+		entrada.nextLine(); //come o \n;
+		while(inicio != 1) {
+			System.out.println("tente novamente");
 			inicio = entrada.nextInt();
-		}while(inicio != 1);
-		Seguradora seguradora = criaSeguradora();
-		System.out.println("Para adicionar um cliente pessoa fisica para sua seguradora, aperte '1', para adicionar um cliente pessoa juridica aperte '2' e para voltar aperte '3' ");
-		int proximo = entrada.nextInt();
+		}
+		Seguradora seguradora = criaSeguradora(entrada);
+		return seguradora;
+	}
+	
+	public static void startClientes(Seguradora seguradora,  int proximo, Scanner entrada) throws Exception {
 		Cliente cliente;
 		switch(proximo) {
 		case 1:
-			cliente = criaClientePF(seguradora);
-			contador_criados++;
+			cliente = criaClientePF(seguradora, entrada);
 			if(cliente != null)
 				break;
 		case 2:
-			cliente = criaClientePJ(seguradora);
-			contador_criados++;
+			cliente = criaClientePJ(seguradora, entrada);
 			if(cliente != null)
 				break;
-		case 3:
-			break;
-		default:
-			System.out.println("Tente novamente");
+		
 	}
-		System.out.println("Para adicionar uma ocorrencia de Sinistro associado a sua seguradora mais recente, aperte '1' e para voltar aperte '2' ");
-			proximo = entrada.nextInt();
-			boolean deuCerto;
-			switch(proximo) {
-			case 1:
-				deuCerto = criaSinistro(seguradora);
-				break;
-			case 2:
-				break;
-			}
-			
-		System.out.println("Para listar os sinistros de sua seguradora mais recente, digite '1', para visualizar um especifico, digite '2', para listar clientes de certo tipo digite '3',  para remover clientes, '4' e para voltar, '5");
-		int mais = entrada.nextInt();
+		
+	}
+	
+
+	
+	
+	public static void startViews(Seguradora seguradora, int mais,  Scanner entrada) {
 		switch(mais){
 		case 1:
 			seguradora.listarSinistros();
@@ -261,18 +231,66 @@ public class Main {
 			String id = entrada.nextLine();
 			id = id.replace("\n", "");
 			seguradora.visualizarSinistro(id);
+			break;
 		case 3:
 			System.out.println("Digite o tipo de cliente (PF/PJ)");
 			String tipo = entrada.nextLine();
 			tipo = tipo.replace("\n", "");
 			seguradora.listarClientes(tipo);
+			break;
 		case 4:
 			System.out.println("Digite o cpf/cnpj do cliente que quer remover");
 			 id = entrada.nextLine();
 			id = id.replace("\n", "");
 			seguradora.removerCliente(id);
-			contador_removidos++;
+			break;
 		}
-	}
 
+	}
+	
+	
+	public static void escolheAcao(Seguradora seguradora, Integer contadorCriador, Integer contadorRemovidos, Scanner entrada){
+		
+	}
+	
+	public static void main(String args[]) throws Exception {
+		int acao = -1;
+		Scanner entrada = new Scanner(System.in);
+		Seguradora seguradora = startSeguradora(entrada);
+		while(acao != 0) {
+		System.out.println("Digite: (1) para cadastrar clientePF\n(2) para cadastrar clientePJ\n(3) para adicionar um sinistro a seguradora");
+		System.out.println("(4) para remover cliente\n(5) para listar sinistros\n(6) para listar clientes de certo tipo\n (0) para encerrar o programa");
+		acao = entrada.nextInt();
+		entrada.nextLine(); //come o \n;
+		switch(acao) {
+		case 1:
+			 startClientes(seguradora, 1, entrada);
+			break;
+		case 2:
+			 startClientes(seguradora,  2, entrada);
+			break;
+		case 3:
+			 criaSinistro(seguradora,entrada);
+			 break;
+		case 4:
+			 startViews(seguradora, 4, entrada);
+			break;
+		case 5:
+			startViews(seguradora, 1,entrada);
+			break;
+		case 6:
+			 startViews(seguradora, 3,entrada);
+			break;
+	}
+		}
+			
+		System.out.println("Obrigada por utilizar o programa! Esse e o estado atual da sua seguradora:\n");
+		System.out.println(seguradora);
+		entrada.close();
+		// fiz o menu agora vou passar no lab (garantir que o numero certo de instancias vai ser feito pq nao posso fazer isso com o usuario)
+		seguradora = new Seguradora("minhaSeguradora", "1111111", "oicolegaarrobadominio", "rua pitagoras");
+		ClientePF.validarCPF("111.444.777-35");
+
+} 	
 }
+
