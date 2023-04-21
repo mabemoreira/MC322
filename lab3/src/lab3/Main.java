@@ -4,7 +4,7 @@ import java.util.Date;
 import java.text.SimpleDateFormat;
 
 public class Main {
-	
+	//menu interativo que eu acabei descobrindo que era o lab 4
 	public static Seguradora criaSeguradora(Scanner entrada) {
 		System.out.println("Otimo! qual o nome da sua seguradora?");
 		String nomeSeguradora = entrada.nextLine();
@@ -34,6 +34,7 @@ public class Main {
 		marca = marca.replace("\n","");
 		System.out.println("Em que ano ele foi fabricado?");
 		int anoFabricacao = entrada.nextInt();
+		entrada.nextLine();// come \n
 		Veiculo veiculo = new Veiculo(placa, marca, modelo, anoFabricacao);
 		return veiculo;
 	}
@@ -63,17 +64,23 @@ public class Main {
 		do {
 		System.out.println("Para cadastrar um novo veiculo para seu cliente, aperte '1', se estiver satisfeito, aperte '0'");
 		cadastro = entrada.nextInt();
+		entrada.nextLine();
 		if(cadastro == 1) {
 			Veiculo veiculo = criaVeiculo(entrada);
-			cliente.adicionaVeiculo(veiculo);}
+			if(cliente instanceof ClientePJ) {
+				cliente = (ClientePJ) cliente;
+				cliente.adicionaVeiculo(veiculo);
+			}
+		}
 		}while(cadastro != 0);
 		if(seguradora.cadastrarCliente(cliente)){
 			System.out.println("Seu cliente foi cadastrado na seguradora com sucesso");
 			return cliente;
 		}
 		return cliente;
-		
-	}
+		}
+	
+	
 	
 	public static Veiculo encontraCarro(Cliente cliente, String placa) {
 		Veiculo veiculo = null;
@@ -92,8 +99,9 @@ public class Main {
 		System.out.println("Onde ocorreu o sinistro?");
 		String endereco = entrada.nextLine();
 		endereco = endereco.replace("\n","");
-		System.out.println("Se o sinistro ocorreu com um cliente ja cadastrado na seguradora, aperte 1, se nao, aperte 2 para cadastra-lo");
+		System.out.println("Se o sinistro ocorreu com um cliente ja cadastrado na seguradora, aperte 1\n, se nao, aperte 2 para cadastra-lo");
 		int prox = entrada.nextInt();
+		entrada.nextLine();
 		Cliente cliente = null;
 		Veiculo veiculo = null;
 		if(prox == 1) {
@@ -107,14 +115,14 @@ public class Main {
 			for(Cliente value: seguradora.getMapaClientes().values()) {
 				if(value instanceof ClientePF) {
 					ClientePF valuecast = (ClientePF) value;
-					if(valuecast.getCPF().equals(id)) {
+					if(valuecast.getCPF().equals(id.replaceAll("[^\\d]",""))) {
 						cliente = valuecast;
 						veiculo = encontraCarro(valuecast, placa);
 					}
 				}
 				else if(value instanceof ClientePJ) {
 					ClientePJ valuecast = (ClientePJ) value;
-					if(valuecast.getCNPJ().equals(id)) {
+					if(valuecast.getCNPJ().equals(id.replaceAll("[^\\d]",""))) {
 						cliente = valuecast;
 						veiculo = encontraCarro(valuecast, placa);
 					}
@@ -124,19 +132,27 @@ public class Main {
 		else if(prox == 2) {
 			flag = true;
 			System.out.println("Aperte '3' para cliente pessoa fisica e '4' para cliente pessoa juridica");
-			System.out.println("Insira a placa do veiculo para localiza-lo");
+			int next = entrada.nextInt();
+			entrada.nextLine();
+			System.out.println("Insira a placa do veiculo que voce cadastrara no cliente com o qual ocorreu o sinistro");
 			String novaplaca = entrada.nextLine();
 			novaplaca = novaplaca.replace("\n", "");
-			int next = entrada.nextInt();
 			if(next == 3) {
 				cliente = criaClientePF(seguradora, entrada);
+				while(cliente == null) {
+					cliente = criaClientePF(seguradora, entrada);
+				}
 			}
 			else if(next == 4) {
 				cliente = criaClientePJ(seguradora,entrada);
+				while(cliente == null) {
+					cliente = criaClientePJ(seguradora,entrada);
+				}
 		}
 			veiculo = encontraCarro(cliente, novaplaca);
 		}
 	 seguradora.gerarSinistro(data, endereco, veiculo, cliente);
+	 System.out.println("Seu sinistro foi cadastrado com sucesso");
 	}
 	
 	public static ClientePF criaClientePF(Seguradora seguradora, Scanner entrada) throws Exception {
@@ -180,7 +196,8 @@ public class Main {
 		entrada.nextLine(); //come o \n;
 		if(cadastro == 1) {
 			Veiculo veiculo = criaVeiculo(entrada);
-			cliente.adicionaVeiculo(veiculo);}
+			cliente.adicionaVeiculo(veiculo);
+			}
 		}while(cadastro != 0);
 		if(seguradora.cadastrarCliente(cliente)){
 			System.out.println("Seu cliente foi cadastrado na seguradora com sucesso");
@@ -197,6 +214,7 @@ public class Main {
 		while(inicio != 1) {
 			System.out.println("tente novamente");
 			inicio = entrada.nextInt();
+			entrada.nextLine();
 		}
 		Seguradora seguradora = criaSeguradora(entrada);
 		return seguradora;
@@ -207,11 +225,9 @@ public class Main {
 		switch(proximo) {
 		case 1:
 			cliente = criaClientePF(seguradora, entrada);
-			if(cliente != null)
 				break;
 		case 2:
 			cliente = criaClientePJ(seguradora, entrada);
-			if(cliente != null)
 				break;
 		
 	}
@@ -224,7 +240,7 @@ public class Main {
 	public static void startViews(Seguradora seguradora, int mais,  Scanner entrada) {
 		switch(mais){
 		case 1:
-			seguradora.listarSinistros();
+			System.out.println(seguradora.listarSinistros());
 				break;
 		case 2:
 			System.out.println("Digite o cpf/cnpj do cliente cujo sinistro quer ver");
@@ -236,7 +252,7 @@ public class Main {
 			System.out.println("Digite o tipo de cliente (PF/PJ)");
 			String tipo = entrada.nextLine();
 			tipo = tipo.replace("\n", "");
-			seguradora.listarClientes(tipo);
+			System.out.println(seguradora.listarClientes(tipo));
 			break;
 		case 4:
 			System.out.println("Digite o cpf/cnpj do cliente que quer remover");
@@ -249,8 +265,32 @@ public class Main {
 	}
 	
 	
-	public static void escolheAcao(Seguradora seguradora, Integer contadorCriador, Integer contadorRemovidos, Scanner entrada){
-		
+	public static void obrigacoesLab() throws Exception{
+		Seguradora seguradora = new Seguradora("minhaSeguradora", "1111111", "oicolegaarrobadominio", "rua pitagoras");
+		ClientePF.validarCPF("111.444.777-35");
+		ClientePJ.validaCNPJ("01.587.123/0001-33");
+		SimpleDateFormat dataformat = new SimpleDateFormat("dd/MM/yyyy");
+		Date dataNascimento = dataformat.parse("13/10/2003");
+		Date data= dataformat.parse("13/10/2022");
+		ClientePF eu = new ClientePF("111.444.777-35", dataNascimento, "mabe" , "salinha de estudos do ifgw", "feminino", "superior incompleto", "nao recebo", data);
+		Veiculo meuCarro = new Veiculo("abc123", "BMW", "mini cooper", 2023);
+		eu.adicionaVeiculo(meuCarro);
+		seguradora.cadastrarCliente(eu);
+		Date aniversario = dataformat.parse("21/07/2009");
+		Date licenca = dataformat.parse("21/04/2030");
+		ClientePF rebeca = new ClientePF("115.543.157-00", aniversario, "rebeca", "no ceu", "cachorro mulher", "cachorro nao tem escola", "A?", licenca);
+		Veiculo carroRebs = new Veiculo("auau1212", "chevrolet", "bolt", 2022);
+		rebeca.adicionaVeiculo(carroRebs);
+		seguradora.cadastrarCliente(rebeca);
+		Date fundacao = dataformat.parse("10/01/1996");
+		ClientePJ escritorio = new ClientePJ("01.587.123/0001-33", fundacao, "escritorio", "sp");
+		Veiculo carroEscritorio = new Veiculo("aaaa1212", "toyota", "corolla", 2020);
+		escritorio.adicionaVeiculo(carroEscritorio);
+		seguradora.cadastrarCliente(escritorio);
+		seguradora.gerarSinistro("21/04/2023", "rua do Ic", meuCarro, eu);
+		seguradora.gerarSinistro("21/04/2023", "rua pitagoras", carroRebs, rebeca);
+		seguradora.visualizarSinistro("111.444.777-35");
+		seguradora.removerCliente("115.543.157-00");
 	}
 	
 	public static void main(String args[]) throws Exception {
@@ -286,11 +326,11 @@ public class Main {
 			
 		System.out.println("Obrigada por utilizar o programa! Esse e o estado atual da sua seguradora:\n");
 		System.out.println(seguradora);
+		System.out.println("####################");
 		entrada.close();
-		// fiz o menu agora vou passar no lab (garantir que o numero certo de instancias vai ser feito pq nao posso fazer isso com o usuario)
-		seguradora = new Seguradora("minhaSeguradora", "1111111", "oicolegaarrobadominio", "rua pitagoras");
-		ClientePF.validarCPF("111.444.777-35");
-
+		System.out.println("Agora as impressoes referentes a outras tarefas obrigatorias do lab:");
+		obrigacoesLab();// fiz o menu agora vou passar no lab (garantir que o numero certo de instancias vai ser feito pq nao posso fazer isso com o usuario)
+		
 } 	
 }
 

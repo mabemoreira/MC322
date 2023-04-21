@@ -33,12 +33,12 @@ public class Cliente {
 	}
 	
 	public String listarVeiculos() {
-		String total ="";
+		StringBuilder total = new StringBuilder();
 		for(Veiculo value: mapaVeiculos.values()) {
-			total.concat(value.toString());
-			total.concat("\n");
+			total.append(value.toString());
+			total.append("\n");
 		}
-		return total.equals("")? "nao ha veiculos" : total;
+		return total.toString().equals("")? "nao ha veiculos" : total.toString();
 	}
 	
 	public boolean adicionaVeiculo(Veiculo carro) {

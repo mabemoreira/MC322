@@ -11,7 +11,7 @@ public class ClientePF extends Cliente{
 	
 	public ClientePF(String CPF, Date dataNascimento, String nome, String endereco, String genero, String educacao, String classeEconomica, Date dataLicenca) {
 		super(nome, endereco);
-		this.CPF = CPF;
+		this.CPF = CPF.replaceAll("[^\\d]","");
 		this.setDataNascimento(dataNascimento);
 		this.setGenero(genero); 
 		this.setEducacao(educacao);
@@ -96,6 +96,6 @@ public class ClientePF extends Cliente{
 
 	public String toString() {
 		return "o cliente " + this.getNome() + " de genero " + genero + " nascido em " + dataNascimento + " possui o CPF " + CPF + " tirou sua habilitacao em " + dataLicenca + " tem até nivel " 
-				+ educacao + " é da classe economica " + classeEconomica + " mora em " + this.getEndereco() + " e possui veiculo(s) " + super.listarVeiculos();
+				+ educacao + " é da classe economica " + classeEconomica + " mora em " + this.getEndereco() + " e possui veiculo(s)\n" + super.listarVeiculos();
 	}
 }

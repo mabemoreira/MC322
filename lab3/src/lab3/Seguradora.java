@@ -74,37 +74,39 @@ public class Seguradora {
 	
 	public boolean removerCliente(String CPFouCNPJCliente) { // tem que receber o cpf, pq se nao podem ter 2 joao da silva e como saber qual remover nesse caso?
 		Cliente teste = mapaClientes.remove(CPFouCNPJCliente);
+		if(teste == null)
+			System.out.println("nao foi possivel remover esse cliente pois ele nao esta cadastrado");
 		return(!(teste == null));// tentou remover um cliente que não existe 
 	}
 
 	public String listarClientes(String tipoCliente) {
-		String total = "";
+		StringBuilder total = new StringBuilder();
 		if(tipoCliente.equals("PJ")) {
 			for(Cliente value : mapaClientes.values()) {
 				if(value instanceof ClientePJ) {
-					total.concat(value.toString());
-					total.concat("\n");
+					total.append(value.toString());
+					total.append("\n");
 				}
 			}
 		}
 		else if(tipoCliente.equals("PF")) {
 			for(Cliente value : mapaClientes.values()) {
 				if(value instanceof ClientePF) {
-					total.concat(value.toString());
-					total.concat("\n");
+					total.append(value.toString());
+					total.append("\n");
 				}
 		}
 	}
-	return total.equals("")? "nao ha clientes desse tipo" : total;
+	return total.toString().equals("")? "nao ha clientes desse tipo" : total.toString();
 }
 	
 	public String listarSinistros() {
-		String total = "";
+		StringBuilder total = new StringBuilder();
 		for(Sinistro value : mapaSinistros.values()) {
-			total.concat(value.toString());
-			total.concat("\n");
+			total.append(value.toString(0));
+			total.append("\n");
 		}
-		return total.equals("")? "nao ha sinistros" : total;
+		return total.toString().equals("")? "nao ha sinistros" : total.toString();
 	}
 	
 	public boolean gerarSinistro(String data, String endereco, Veiculo veiculo, Cliente cliente) {
@@ -119,13 +121,13 @@ public class Seguradora {
 		for(Sinistro value: mapaSinistros.values()) {
 			if(value.getCliente() instanceof ClientePF){
 				ClientePF clientecast = (ClientePF) value.getCliente();
-				if(clientecast.getCPF().equals(cliente)) {
+				if(clientecast.getCPF().equals(cliente.replaceAll("[^\\d]",""))) {
 					System.out.println(value.toString(0));
 					flag = true;
 			}
 			else if (value.getCliente() instanceof ClientePJ) {
 				ClientePJ clientecasted = (ClientePJ) value.getCliente();
-				if(clientecasted.getCNPJ().equals(cliente)) {
+				if(clientecasted.getCNPJ().equals(cliente.replaceAll("[^\\d]",""))) {
 					System.out.println(value.toString(0));
 					flag = true; // fiz isso ao inves de retornar pq pode ter varios sinistros da mesma pessoa
 			}
