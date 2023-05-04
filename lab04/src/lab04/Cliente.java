@@ -11,8 +11,8 @@ public class Cliente {
 		this.nome = nome;
 		this.endereco = endereco;
 		mapaVeiculos = new HashMap<String, Veiculo>(); 
-		valorSeguro = 0; // no constructor, todos tem 0 carros;
-	}
+		valorSeguro = 0; 
+		}
 
 	public String getNome() {
 		return nome;
@@ -30,8 +30,8 @@ public class Cliente {
 		this.endereco = endereco;
 	}
 	
-	public void setValorSeguro() {
-		this.valorSeguro = calculaScore();
+	public void setValorSeguro(double valorSeguro) {
+		this.valorSeguro = valorSeguro;
 	}
 	
 	public double getValorSeguro() {
@@ -63,12 +63,13 @@ public class Cliente {
 	}
 	
 	public String toString() {
-	return	" O cliente " + nome + " que reside em " + endereco + " possui o(s) seguinte(s) veiculo(s): " + this.listarVeiculos();
+	return	" O cliente " + nome + " que reside em " + endereco + " possui o(s) seguinte(s) veiculo(s):\n " + this.listarVeiculos() 
+	+ "e tem o seguinte valor de seguro" + valorSeguro;
 	}
 	
 	public double calculaScore() {
 		Cliente novo = null;
-		if(this instanceof ClientePF) { // era pra ter calcula score no tipo cliente? pq a ideia do polimorfismo nao é o compilador fazer isso automaticamente?
+		if(this instanceof ClientePF) { 
 			novo = (ClientePF) this;
 		}
 		else if(this instanceof ClientePJ) {

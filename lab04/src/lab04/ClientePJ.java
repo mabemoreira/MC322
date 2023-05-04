@@ -27,8 +27,7 @@ public class ClientePJ extends Cliente {
 		}
 
 		public void setQtdeFuncionarios(int qtdeFuncionarios) {
-			this.qtdeFuncionarios = qtdeFuncionarios;
-			this.setValorSeguro(); //isso ta certo? pq é a unica utilidade que eu vejo pro calcula score de cliente;
+			this.qtdeFuncionarios = qtdeFuncionarios;//isso ta certo? pq é a unica utilidade que eu vejo pro calcula score de cliente;
 		}
 		
 		public double calculaScore(){

@@ -76,6 +76,6 @@ public class ClientePF extends Cliente{
 
 	public String toString() {
 		return "o cliente " + this.getNome() + " de genero " + genero + " nascido em " + dataNascimento + " possui o CPF " + CPF + " tirou sua habilitacao em " + dataLicenca + " tem até nivel " 
-				+ educacao + " é da classe economica " + classeEconomica + " mora em " + this.getEndereco() + " e possui veiculo(s)\n" + super.listarVeiculos();
+				+ educacao + " é da classe economica " + classeEconomica + " mora em " + this.getEndereco() + " possui veiculo(s)\n" + super.listarVeiculos() + "e seu seguro vale" + this.getValorSeguro();
 	}
 }

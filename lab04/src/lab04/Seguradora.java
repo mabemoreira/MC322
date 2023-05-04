@@ -146,18 +146,22 @@ public class Seguradora {
 		int contador = 0;
 		double preco;
 		Cliente ele = null;
-		for(Cliente value : mapaClientes.values()) {
-			if(value instanceof ClientePF) {
-				ClientePF novovalue = (ClientePF) value;
-				if (novovalue.getCPF().equals(cliente))
-					ele = novovalue;
+		Cliente intermediario = null;
+		for(Sinistro value : mapaSinistros.values()) {
+			if(value.getCliente() instanceof ClientePF) {
+				intermediario = (ClientePF) value.getCliente();
+				if(intermediario.getCPF().equals(cliente)) {
+					ele = intermediario;
 					contador++;
+				}
+		
 			}
-			else if(value instanceof ClientePJ) {
-				ClientePJ novovalue = (ClientePJ) value;
-				if(novovalue.getCNPJ().equals(cliente))
-					ele = novovalue;
+			else if(value.getCliente() instanceof ClientePJ) {
+				intermediario = (ClientePJ) value.getCliente();
+				if(intermediario.getCNPJ.equals(cliente)) {
+					ele = interemediario;
 					contador++;
+				}
 			}
 		}
 		preco = ele.calculaScore() * (1 + contador);
