@@ -41,6 +41,10 @@ public class Cliente {
 	public HashMap <String, Veiculo> getMapaVeiculos() {
 		return mapaVeiculos;
 	}
+
+	public void setMapaVeiculos(HashMap <String, Veiculo> mapaVeiculos){
+		this.mapaVeiculos = mapaVeiculos;
+	}
 	
 	public String listarVeiculos() {
 		StringBuilder total = new StringBuilder();

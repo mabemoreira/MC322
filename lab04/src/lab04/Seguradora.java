@@ -166,7 +166,9 @@ public class Seguradora {
 				}
 			}
 		}
+
 		preco = ele.calculaScore() * (1 + contador); // FUNCAO DA SEGURADORA RECALCULAR SCORE
+		ele.setValorSeguro(preco); 
 		return preco;
 	}
 	
@@ -183,14 +185,15 @@ public class Seguradora {
 	public String toString() {
 		return "A seguradora " + nome + " de telefone " + telefone + " localizada no endereco " + endereco + " com email "
 				+ email + " possui os seguintes clientes pessoa física:\n " + this.listarClientes("PF") + " e os seguintes clientes do tipo pessoa juridica:\n "
-				+this.listarClientes("PJ") + " entre ambos os tipos, possui os seguintes sinistros:\n" + this.listarSinistros();
+				+this.listarClientes("PJ") + " entre ambos os tipos, possui os seguintes sinistros:\n" + this.listarSinistros() + " e tem uma receita de"
+				+ this.calcularReceita() + " reais";
 	}
 	
 	public String toString(int sobrecarga) {
 		if(sobrecarga == 1) 
 			return "A seguradora " + nome + " de telefone " + telefone + " localizada no endereco " + endereco + " com email "
 					+ email + " possui os seguintes clientes pessoa física: " + this.listarClientes("PF") + " e os seguintes clientes do tipo pessoa juridica: "
-					+this.listarClientes("PJ"); // só para nao entrar no loop infinito de sinistro chamando seguradora
+					+this.listarClientes("PJ") + "e tem uma receita de " + this.calcularReceita() + " reais" ;// só para nao entrar no loop infinito de sinistro chamando seguradora
 		
 		else 
 			return this.toString();

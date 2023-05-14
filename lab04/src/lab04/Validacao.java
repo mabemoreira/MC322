@@ -1,6 +1,8 @@
 package lab04;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Scanner;
 
 public class Validacao {
 	private static int calculaDigitoCPF(String cpfTeste, int aSomar, int acrescimo) {
@@ -72,4 +74,49 @@ public class Validacao {
 			return(b== segundoDigito);
 		}
 		
+
+	private static boolean haSeg(LinkedList<Seguradora> listasegs, String nomeseg, Seguradora seguradora){
+		boolean achei = false;
+			for(Seguradora s: listasegs){
+				if(s.getNome().equals(nomeseg)){
+					achei = true;
+					seguradora = s;
+				}
+			}
+			return achei;
+	}
+
+	public static Seguradora haSist(LinkedList<Seguradora> listasegs, String nomeseg, Seguradora seguradora, Scanner entrada){
+		boolean achei = Validacao.haSeg(listasegs, nomeseg, seguradora);
+		while(achei == false){
+			System.out.println("Nao ha essa seguradora no sistema, aperte 5 para digitar outro nome ou 6 para voltar");
+					int esc = entrada.nextInt();
+					if(esc == 6)
+						return null;
+					else if(esc == 5){
+						nomeseg = entrada.nextLine();
+						achei = Validacao.haSeg(listasegs, nomeseg, seguradora);
+					}
+		}
+		return seguradora; // fiz isso pra nao dar null pointer no calcula receita 
+	}
+
+	public static Cliente achaCliente(Seguradora seguradora, String id){
+		Cliente c = null;
+		for(Cliente value: seguradora.getMapaClientes().values()){
+			if(value instanceof ClientePF){
+				ClientePF inter = (ClientePF) value;
+				if(inter.getCPF().equals(id)){
+					c = inter;
+				}
+			}
+			else if(value instanceof ClientePJ){
+				ClientePJ inter = (ClientePJ) value;
+				if(inter.getCNPJ().equals(id)){
+					c = inter;
+				}
+			}
+		}
+		return c;
+	}
 }
