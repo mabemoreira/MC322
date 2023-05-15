@@ -80,7 +80,8 @@ public class Validacao {
 			for(Seguradora s: listasegs){
 				if(s.getNome().equals(nomeseg.toLowerCase())){
 					achei = true;
-					seguradora = s;
+					seguradora = s; // erro ta aqui, ele n altera a seguradora;
+
 				}
 			}
 			return achei;

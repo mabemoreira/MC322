@@ -140,9 +140,11 @@ public class AppMain {
 			Date dataFundacao = dataformat.parse(dataFundacaoS);
 			System.out.println("Quantos funcionarios tem seu cliente?");
 			int func = entrada.nextInt();
+			entrada.nextLine();
 			ClientePJ cliente = new ClientePJ (CNPJCliente, dataFundacao, nomeCliente, enderecoCliente, func);
 			int cadastro;
 			func = entrada.nextInt();
+			entrada.nextLine();
 			do {
 			System.out.println("Para cadastrar um novo veiculo para seu cliente, aperte '1', se estiver satisfeito, aperte '0'");
 			cadastro = entrada.nextInt();
@@ -272,6 +274,7 @@ public class AppMain {
 				seguradora.visualizarSinistro(doc);
 				System.out.println("Digite 5 para remover um desses sinistros e 6 para parar");
 				continua = entrada.nextInt();
+				entrada.nextLine();
 				if(continua == 5){
 					System.out.println("Digite o cpf/ cnpj do cliente a quem pertence o sinistro");
 					String cliente = entrada.nextLine();
@@ -291,6 +294,10 @@ public class AppMain {
 		}
 	
 		private static void listar(int escolha, Scanner entrada, LinkedList<Seguradora> listaseguradoras) {
+			if(listaseguradoras.size() == 0){
+				System.out.println("Voce ainda nao tem seguradoras cadastradas, tente cadastralas com clientes e sinistros e volte");
+				return;
+			}
 			MenuListar op = MenuListar.deIntpraEnum(escolha);
 			switch(op) {
 			case CLIENTE:
@@ -304,7 +311,7 @@ public class AppMain {
 				do{
 					System.out.println("Digite o tipo de cliente que voce quer listar (PF/PJ)");
 					tipo = entrada.nextLine();
-				}while(!(tipo.toUpperCase().equals("PF")) || !(tipo.toUpperCase().equals("PJ")));
+				}while(!(tipo.toUpperCase().equals("PF")) && !(tipo.toUpperCase().equals("PJ")));
 				System.out.println(seg.listarClientes(tipo.toUpperCase()));
 				break;
 			case SINISTRO_SEG:
@@ -378,11 +385,11 @@ public class AppMain {
 				do{
 				System.out.println("Qual tipo de cliente quer cadastrar(PF/PJ)?");
 				tipo = entrada.nextLine();
-				} while((!tipo.toUpperCase().equals("PJ")) || (!tipo.toUpperCase().equals("PF")));
+				} while(!(tipo.toUpperCase().equals("PJ")) && !(tipo.toUpperCase().equals("PF")));
 				System.out.println("Digite o nome da seguradora que na qual quer cadastrar o cliente");
 				String nomeS = entrada.nextLine();
 				Seguradora SegS = null;
-				SegS = Validacao.haSist(listaseguradoras, nomeS, SegS, entrada);
+				SegS = Validacao.haSist(listaseguradoras, nomeS, SegS, entrada); // tem erro aqui
 				if(SegS == null){
 					return;
 				}
@@ -428,23 +435,26 @@ public class AppMain {
 		}
 	
 	
-		private static void MenuPrincipal(int escolha, Scanner entrada, LinkedList<Seguradora> listaseguradoras, int quit) throws Exception{ // tem q ta num while na main
+		private static int MenuPrincipal(int escolha, Scanner entrada, LinkedList<Seguradora> listaseguradoras) throws Exception{ // tem q ta num while na main
 			MenuOperacoes op = MenuOperacoes.deIntpraEnum(escolha);
 			switch(op) {
 			case CADASTRAR:
 				System.out.println("Para cadastrar cliente aperte: 1\nPara cadastrar veiculo aperte: 2\nPara cadastrar seguradora aperte: 3\nPara voltar aperte: 4");
 				escolha = entrada.nextInt();
+				entrada.nextLine();
 				cadastros(escolha, entrada, listaseguradoras);
 				break;
 			case LISTAR:
 				System.out.println("Para listar clientes aperte: 1\nPara listar sinistros por seguradora aperte: 2");
 				System.out.println("Para listar sinistros por cliente aperte: 3\nPara listar veiculo por cliente aperte: 4\nPara listar veiculo por seguradora aperte: 5\nPara voltar aperte: 6");
 				escolha = entrada.nextInt();
+				entrada.nextLine();
 				listar(escolha, entrada, listaseguradoras);
 				break;
 			case EXCLUIR:  
 				System.out.println("Para excluir cliente aperte: 1\nPara excluir veiculo aperte: 2\nPara excluir sinistro aperte: 3\nPara voltar aperte: 4");
 				escolha = entrada.nextInt();
+				entrada.nextLine();
 				excluir(escolha, entrada, listaseguradoras);
 				break;
 			case GERAR_SINISTRO:
@@ -487,6 +497,7 @@ public class AppMain {
 				while(c1 == null){
 					System.out.println("cliente nao encontrado, aperte 5 para tentar de novo e 6 para voltar");
 					int ex = entrada.nextInt();
+					entrada.nextLine();
 					if(ex == 5){
 					id1 = entrada.nextLine();
 					id1 = id1.replaceAll("[^\\d]","");
@@ -503,6 +514,7 @@ public class AppMain {
 				while(c2 == null){
 					System.out.println("cliente nao encontrado, aperte 5 para tentar de novo e 6 para voltar");
 					int ex = entrada.nextInt();
+					entrada.nextLine();
 					if(ex == 5){
 					id2 = entrada.nextLine();
 					id2 = id2.replaceAll("[^\\d]","");
@@ -533,25 +545,28 @@ public class AppMain {
 				}
 				System.out.println("A receita da seguradora" + s.getNome() + "eh" + s.calcularReceita());
 			case SAIR:
-				quit = 1;
-				return;
+				return 1;
 			default:
 				break;
 			}
+			return 0;
 		}
 	
 	
 	public static void main(String args[]) throws Exception{
 		obrigacoesdolab();
-		int escolha, quit = 0;
+		int escolha;
+		Integer quit = 0;
 		Scanner entrada = new Scanner(System.in);
 		LinkedList<Seguradora> listaSeguradoras = new LinkedList<Seguradora>();	
 		do{
 		System.out.println("Ola! Bem vindo ao menu de seguradoras!\nPara cadastrar aperte: 1\nPara listar aperte: 2");
 		System.out.println("Para excluir aperte: 3\nPara gerar sinistro aperte: 4\nPara transferir seguro aperte: 5\nPara sair aperte: 0");
 		escolha = entrada.nextInt();
-		MenuPrincipal(escolha,entrada,listaSeguradoras, quit);
+		entrada.nextLine();
+		quit = MenuPrincipal(escolha,entrada,listaSeguradoras);
 		} while(quit != 1);
 		entrada.close();
+		System.out.println("Obrigada por utilizar o menu!");
 	}
 }
