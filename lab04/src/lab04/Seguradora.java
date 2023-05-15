@@ -12,7 +12,7 @@ public class Seguradora {
 	private HashMap <String, Cliente> mapaClientes; //mapa cpf -> cliente
 	
 	public Seguradora(String nome, String telefone, String email, String endereco){
-		this.setNome(nome);
+		this.setNome(nome.toLowerCase());
 		this.setTelefone(telefone);
 		this.setEmail(email);
 		this.setEndereco(endereco);

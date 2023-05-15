@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.Scanner;
 
+
 public class AppMain {
 	private static void obrigacoesdolab() throws Exception {
 		SimpleDateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy");
@@ -31,7 +32,24 @@ public class AppMain {
 		System.out.println(seguradora.calcularReceita());
 		}
 
-		public static Veiculo criaVeiculo(Scanner entrada) {
+		private static Seguradora criaSeguradora(Scanner entrada) {
+			System.out.println("Otimo! qual o nome da sua seguradora?");
+			String nomeSeguradora = entrada.nextLine();
+			nomeSeguradora = nomeSeguradora.replace("\n","");
+			System.out.println("E qual o endereco dela?");
+			String enderecoSeguradora = entrada.nextLine();
+			enderecoSeguradora = enderecoSeguradora.replace("\n","");
+			System.out.println("E o telefone?");
+			String telefoneSeguradora = entrada.nextLine();
+			telefoneSeguradora = telefoneSeguradora.replace("\n","");
+			System.out.println("Por ultimo, qual o email dela?");
+			String emailSeguradora = entrada.nextLine();
+			emailSeguradora = emailSeguradora.replace("\n","");
+			Seguradora seguradora = new Seguradora(nomeSeguradora, telefoneSeguradora, emailSeguradora, enderecoSeguradora);
+			return seguradora;
+		}
+
+		private static Veiculo criaVeiculo(Scanner entrada) {
 			System.out.println("Qual a placa do veiculo?");
 			String placa = entrada.nextLine();
 			placa = placa.replace("\n","");
@@ -47,7 +65,7 @@ public class AppMain {
 			Veiculo veiculo = new Veiculo(placa, marca, modelo, anoFabricacao);
 			return veiculo;
 		}
-		public static ClientePF criaClientePF(Seguradora seguradora, Scanner entrada) throws Exception {
+		private static ClientePF criaClientePF(Seguradora seguradora, Scanner entrada) throws Exception {
 			System.out.println("Qual o nome do seu cliente?");
 			String nomeCliente = entrada.nextLine();
 			nomeCliente = nomeCliente.replace("\n","");
@@ -99,7 +117,7 @@ public class AppMain {
 			return cliente; // nunca vai chegar aqui nesse lab mas quem sabe no proximo
 		}
 
-		public static ClientePJ criaClientePJ(Seguradora seguradora, Scanner entrada) throws Exception{
+		private static ClientePJ criaClientePJ(Seguradora seguradora, Scanner entrada) throws Exception{
 			System.out.println("Qual o nome do seu cliente?");
 			String nomeCliente = entrada.nextLine();
 			nomeCliente = nomeCliente.replace("\n","");
@@ -142,7 +160,7 @@ public class AppMain {
 			return cliente;
 			}
 
-		public static Veiculo encontraCarro(Cliente cliente, String placa) {
+		private static Veiculo encontraCarro(Cliente cliente, String placa) {
 			Veiculo veiculo = null;
 			for(Veiculo valor: cliente.getMapaVeiculos().values()) {
 				if(valor.getPlaca().equals(placa))
@@ -227,9 +245,9 @@ public class AppMain {
 			case SINISTRO:
 				break;
 			case VOLTAR:
-				break;
+				return;
 			default:
-				break;
+				return;
 			}
 		}
 	
@@ -247,30 +265,73 @@ public class AppMain {
 			case VEICULO_SEGURADORA:
 				break;
 			case VOLTAR:
-				break;
+				return;
 			default:
-				break;	
+				return;	
 			}
 		}
 
-		private static void cadastros(int escolha, Scanner entrada, LinkedList<Seguradora> listaseguradoras) {
+		private static void cadastros(int escolha, Scanner entrada, LinkedList<Seguradora> listaseguradoras) throws Exception{
 			MenuCadastrar op = MenuCadastrar.deIntpraEnum(escolha);
 			switch(op) {
 			case CLIENTE:
-				break;
+				String tipo = null;
+				if(listaseguradoras.size() == 0){
+					System.out.println("Voce nao tem seguradoras, crie uma e volte aqui");
+					break;
+				}
+				do{
+				System.out.println("Qual tipo de cliente quer cadastrar(PF/PJ)?");
+				tipo = entrada.nextLine();
+				} while((!tipo.equals("PJ")) || (!tipo.equals("PF")));
+				System.out.println("Digite o nome da seguradora que na qual quer cadastrar o cliente");
+				String nomeS = entrada.nextLine();
+				Seguradora SegS = null;
+				SegS = Validacao.haSist(listaseguradoras, nomeS, SegS, entrada);
+				if(SegS == null){
+					return;
+				}
+				if(tipo.equals("PF")){
+					criaClientePF(SegS, entrada);
+					break;
+				}
+				else if(tipo.equals("PJ")){
+					criaClientePJ(SegS, entrada);
+					break;
+				}
 			case VEICULO:
-				break;
+				if(listaseguradoras.size() == 0){
+					System.out.println("Voce nao tem seguradoras, crie uma e volte aqui");
+					break;
+				}
+				System.out.println("Digite o CPF/CNPJ do cliente ao qual voce quer adicionar um veiculo");
+				String id = entrada.nextLine();
+				id = id.replaceAll("[^\\d]","");
+				System.out.println("Digite o nome da seguradora em que esse cliente esta cadastrado: ");
+				String seg = entrada.nextLine();
+				Seguradora segs = null;
+				segs = Validacao.haSist(listaseguradoras, seg, segs, entrada);
+				if(segs == null){
+					return;
+				}
+				Cliente c = Validacao.achaCliente(segs, id);
+				Veiculo v =criaVeiculo(entrada);
+				c.adicionaVeiculo(v);
+				System.out.println("Veiculo adicionado com sucesso");
+				segs.calcularPrecoSeguroCliente(id);
 			case SEGURADORA: 
-				break;
+				Seguradora seguradora = criaSeguradora(entrada);
+				listaseguradoras.add(seguradora);
+				System.out.println("Seguradora cadastrada com sucesso");
 			case VOLTAR:
-				break;
+				return;
 			default:
-				break;
+				return;
 			}
 		}
 	
 	
-		private static void MenuPrincipal(int escolha, Scanner entrada, LinkedList<Seguradora> listaseguradoras) throws Exception{ // tem q ta num while na main
+		private static void MenuPrincipal(int escolha, Scanner entrada, LinkedList<Seguradora> listaseguradoras, int quit) throws Exception{ // tem q ta num while na main
 			MenuOperacoes op = MenuOperacoes.deIntpraEnum(escolha);
 			switch(op) {
 			case CADASTRAR:
@@ -375,8 +436,8 @@ public class AppMain {
 				}
 				System.out.println("A receita da seguradora" + s.getNome() + "eh" + s.calcularReceita());
 			case SAIR:
-				escolha = 0;
-				break;
+				quit = 1;
+				return;
 			default:
 				break;
 			}
@@ -385,15 +446,15 @@ public class AppMain {
 	
 	public static void main(String args[]) throws Exception{
 		obrigacoesdolab();
-		int escolha;
+		int escolha, quit = 0;
 		Scanner entrada = new Scanner(System.in);
 		LinkedList<Seguradora> listaSeguradoras = new LinkedList<Seguradora>();	
+		do{
 		System.out.println("Ola! Bem vindo ao menu de seguradoras!\nPara cadastrar aperte: 1\nPara listar aperte: 2");
 		System.out.println("Para excluir aperte: 3\nPara gerar sinistro aperte: 4\nPara transferir seguro aperte: 5\nPara sair aperte: 0");
 		escolha = entrada.nextInt();
-		while(escolha != 0){
-		MenuPrincipal(escolha,entrada,listaSeguradoras);
-		}
+		MenuPrincipal(escolha,entrada,listaSeguradoras, quit);
+		} while(quit != 1);
 		entrada.close();
 	}
 }

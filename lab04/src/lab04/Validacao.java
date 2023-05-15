@@ -78,7 +78,7 @@ public class Validacao {
 	private static boolean haSeg(LinkedList<Seguradora> listasegs, String nomeseg, Seguradora seguradora){
 		boolean achei = false;
 			for(Seguradora s: listasegs){
-				if(s.getNome().equals(nomeseg)){
+				if(s.getNome().equals(nomeseg.toLowerCase())){
 					achei = true;
 					seguradora = s;
 				}
@@ -119,4 +119,5 @@ public class Validacao {
 		}
 		return c;
 	}
+
 }
