@@ -75,31 +75,30 @@ public class Validacao {
 		}
 		
 
-	private static boolean haSeg(LinkedList<Seguradora> listasegs, String nomeseg, Seguradora seguradora){
-		boolean achei = false;
+	private static Seguradora haSeg(LinkedList<Seguradora> listasegs, String nomeseg){
+		Seguradora seg = null;
 			for(Seguradora s: listasegs){
 				if(s.getNome().equals(nomeseg.toLowerCase())){
-					achei = true;
-					seguradora = s; // erro ta aqui, ele n altera a seguradora;
-
+					seg = s;
 				}
 			}
-			return achei;
+			return seg;
 	}
 
-	public static Seguradora haSist(LinkedList<Seguradora> listasegs, String nomeseg, Seguradora seguradora, Scanner entrada){
-		boolean achei = Validacao.haSeg(listasegs, nomeseg, seguradora);
-		while(achei == false){
+	public static Seguradora haSist(LinkedList<Seguradora> listasegs, String nomeseg, Scanner entrada){
+		Seguradora seg = null;
+		seg = haSeg(listasegs, nomeseg);
+		while(seg == null){
 			System.out.println("Nao ha essa seguradora no sistema, aperte 5 para digitar outro nome ou 6 para voltar");
 					int esc = entrada.nextInt();
 					if(esc == 6)
 						return null;
 					else if(esc == 5){
 						nomeseg = entrada.nextLine();
-						achei = Validacao.haSeg(listasegs, nomeseg, seguradora);
+						seg = Validacao.haSeg(listasegs, nomeseg);
 					}
 		}
-		return seguradora; // fiz isso pra nao dar null pointer no calcula receita 
+		return seg; // fiz isso pra nao dar null pointer no calcula receita 
 	}
 
 	public static Cliente achaCliente(Seguradora seguradora, String id){

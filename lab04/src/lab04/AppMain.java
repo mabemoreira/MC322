@@ -231,7 +231,7 @@ public class AppMain {
 				Seguradora seg = null;
 				System.out.println("Digite o nome da seguradora a qual o cliente pertence");
 				String nomeseg = entrada.nextLine();
-				seg  = Validacao.haSist(listaSeguradora, nomeseg, seg, entrada);
+				seg  = Validacao.haSist(listaSeguradora, nomeseg,  entrada);
 				if(seg == null)
 					return;
 				System.out.println("Digite o CPF ou CNPJ do cliente");
@@ -244,7 +244,7 @@ public class AppMain {
 			System.out.println("Digite o nome da seguradora a qual o cliente pertence");
 				Seguradora s = null;
 				String nomes = entrada.nextLine();
-				s  = Validacao.haSist(listaSeguradora, nomes, s, entrada);
+				s  = Validacao.haSist(listaSeguradora, nomes, entrada);
 				if(s == null)
 					return;
 				System.out.println("Digite o CPF ou CNPJ do cliente");
@@ -264,7 +264,7 @@ public class AppMain {
 				Seguradora seguradora = null;
 				System.out.println("Digite o nome da seguradora a qual o cliente dono do sinistro pertence: ");
 				String segu = entrada.nextLine();
-				seguradora = Validacao.haSist(listaSeguradora, segu, seguradora, entrada);
+				seguradora = Validacao.haSist(listaSeguradora, segu, entrada);
 				if(seguradora == null){
 					return;
 				}
@@ -305,7 +305,7 @@ public class AppMain {
 				String tipo = null;
 				System.out.println("Digite o nome da seguradora que voce quer listar os clientes");
 				String s = entrada.nextLine();
-				seg = Validacao.haSist(listaseguradoras, s, seg, entrada);
+				seg = Validacao.haSist(listaseguradoras, s,  entrada);
 				if(seg == null)
 					return;
 				do{
@@ -318,7 +318,7 @@ public class AppMain {
 				System.out.println("Digite o nome da seguradora que quer listar os sinistros");
 				String nomes = entrada.nextLine();
 				Seguradora segu = null;
-				segu = Validacao.haSist(listaseguradoras, nomes, segu, entrada);
+				segu = Validacao.haSist(listaseguradoras, nomes, entrada);
 				if(segu == null){
 					return;
 				}
@@ -329,7 +329,7 @@ public class AppMain {
 				Seguradora segs = null;
 				System.out.println("Digite o nome da seguradora a qual o cliente pertence");
 				String nomeseg = entrada.nextLine();
-				segs = Validacao.haSist(listaseguradoras, nomeseg, segs, entrada);
+				segs = Validacao.haSist(listaseguradoras, nomeseg, entrada);
 				if(segs == null){
 					return;
 				}
@@ -342,7 +342,7 @@ public class AppMain {
 				System.out.println("Digite o nome da seguradora a qual o cliente pertence");
 				String n = entrada.nextLine();
 				Seguradora seguradora = null;
-				seguradora = Validacao.haSist(listaseguradoras, n, seguradora, entrada);
+				seguradora = Validacao.haSist(listaseguradoras, n,  entrada);
 				if(seguradora == null){
 					return;
 				}
@@ -359,7 +359,7 @@ public class AppMain {
 				System.out.println("Digite o nome da seguradora cujos veiculos quer ver");
 				String nome = entrada.nextLine();
 				Seguradora sees = null;
-				sees = Validacao.haSist(listaseguradoras, nome, sees, entrada);
+				sees = Validacao.haSist(listaseguradoras, nome,  entrada);
 				if(sees == null){
 					return;
 				}
@@ -389,7 +389,7 @@ public class AppMain {
 				System.out.println("Digite o nome da seguradora que na qual quer cadastrar o cliente");
 				String nomeS = entrada.nextLine();
 				Seguradora SegS = null;
-				SegS = Validacao.haSist(listaseguradoras, nomeS, SegS, entrada); // tem erro aqui
+				SegS = Validacao.haSist(listaseguradoras, nomeS, entrada); 
 				if(SegS == null){
 					return;
 				}
@@ -412,7 +412,7 @@ public class AppMain {
 				System.out.println("Digite o nome da seguradora em que esse cliente esta cadastrado: ");
 				String seg = entrada.nextLine();
 				Seguradora segs = null;
-				segs = Validacao.haSist(listaseguradoras, seg, segs, entrada);
+				segs = Validacao.haSist(listaseguradoras, seg, entrada);
 				if(segs == null){
 					return;
 				}
@@ -465,7 +465,7 @@ public class AppMain {
 				System.out.println("Diga o nome da seguradora para o qual você quer gerar o sinistro: ");
 				String seg = entrada.nextLine();
 				Seguradora seguradora = null;
-				seguradora = Validacao.haSist(listaseguradoras, seg, seguradora, entrada);
+				seguradora = Validacao.haSist(listaseguradoras, seg, entrada);
 				if(seguradora == null){
 					break;
 				}
@@ -478,13 +478,13 @@ public class AppMain {
 				Seguradora s1 = null, s2 = null;
 				System.out.println("Digite o nome da seguradora do cliente que atualmente possui o seguro: ");
 				String nomeS1 = entrada.nextLine();
-				s1 = Validacao.haSist(listaseguradoras, nomeS1, s1, entrada);
+				s1 = Validacao.haSist(listaseguradoras, nomeS1, entrada);
 				if(s1 == null){
 					break;
 				}
 				System.out.println("Digite o nome da seguradora do cliente para quem o seguro sera transferido: ");
 				String nomeS2 = entrada.nextLine();
-				s2 = Validacao.haSist(listaseguradoras, nomeS2, s2, entrada);
+				s2 = Validacao.haSist(listaseguradoras, nomeS2, entrada);
 				if(s2 == null){
 					break;
 				}
@@ -539,7 +539,7 @@ public class AppMain {
 				System.out.println("Digite o nome da seguradora cuja receita quer calcular:");
 				String segura = entrada.nextLine();
 				Seguradora s = null;
-				s = Validacao.haSist(listaseguradoras, segura, s, entrada);
+				s = Validacao.haSist(listaseguradoras, segura, entrada);
 				if(s == null){
 					break;
 				}
