@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.Scanner;
 
 
+
+
 public class AppMain {
 	private static void obrigacoesdolab() throws Exception {
 		SimpleDateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy");
@@ -163,7 +165,7 @@ public class AppMain {
 		private static Veiculo encontraCarro(Cliente cliente, String placa) {
 			Veiculo veiculo = null;
 			for(Veiculo valor: cliente.getMapaVeiculos().values()) {
-				if(valor.getPlaca().equals(placa))
+				if(valor.getPlaca().equals(placa.toUpperCase()))
 					veiculo = valor;
 			}
 			return veiculo;
@@ -171,7 +173,6 @@ public class AppMain {
 
 
 		private static void criaSinistro(Seguradora seguradora, Scanner entrada) throws Exception{ // ja tinha no lab 3
-			boolean flag = false;
 			System.out.println("Quando ocorreu o sinistro? (dd/MM/aaaa)");
 			String data = entrada.nextLine();
 			SimpleDateFormat dataformat = new SimpleDateFormat("dd/MM/yyyy");
@@ -179,13 +180,9 @@ public class AppMain {
 			System.out.println("Onde ocorreu o sinistro?");
 			String endereco = entrada.nextLine();
 			endereco = endereco.replace("\n","");
-			System.out.println("Se o sinistro ocorreu com um cliente ja cadastrado na seguradora, aperte 1\n, se nao, aperte 2 para cadastra-lo");
-			int prox = entrada.nextInt();
-			entrada.nextLine();
+			entrada.nextLine(); // turns out que seguradoras cobrirem sinistros de quando os clientes nao eram clientes deles quebraria o modelo de negocios das seguradoras
 			Cliente cliente = null;
 			Veiculo veiculo = null;
-			if(prox == 1) {
-				flag = true;
 				System.out.println("Insira o cpf/cnpj do cliente para localiza-lo");
 				String id = entrada.nextLine();
 				id = id.replace("\n", "");
@@ -207,42 +204,84 @@ public class AppMain {
 							veiculo = encontraCarro(valuecast, placa);
 						}
 					}
-				}
+			   }
+			   if(cliente == null){
+				System.out.println("Esse cliente nao pertence a essa seguradora, tente adiciona-lo a ela e depois gerar o sinistro");
+				return;
+			   }
+			   else if(veiculo == null){
+				System.out.println("Esse veiculo nao pertence a esse cliente, tente adiciona-lo a ele ou transferir o seguro e depois gerar o sinistro");
+			   }
+			   seguradora.gerarSinistro(date, endereco, veiculo, cliente);
+		 	System.out.println("Seu sinistro foi cadastrado com sucesso");
 			}
-			else if(prox == 2) {
-				flag = true;
-				System.out.println("Aperte '3' para cliente pessoa fisica e '4' para cliente pessoa juridica");
-				int next = entrada.nextInt();
-				entrada.nextLine();
-				System.out.println("Insira a placa do veiculo que voce cadastrara no cliente com o qual ocorreu o sinistro");
-				String novaplaca = entrada.nextLine();
-				novaplaca = novaplaca.replace("\n", "");
-				if(next == 3) {
-					cliente = criaClientePF(seguradora, entrada);
-					while(cliente == null) {
-						cliente = criaClientePF(seguradora, entrada);
-					}
-				}
-				else if(next == 4) {
-					cliente = criaClientePJ(seguradora,entrada);
-					while(cliente == null) {
-						cliente = criaClientePJ(seguradora,entrada);
-					}
-			}
-				veiculo = encontraCarro(cliente, novaplaca);
-			}
-		 seguradora.gerarSinistro(date, endereco, veiculo, cliente);
-		 System.out.println("Seu sinistro foi cadastrado com sucesso");
-		}
+			
+		 
 	
-		private static void excluir(int escolha, Scanner entrada, LinkedList<Seguradora> Seguradora) {
+		private static void excluir(int escolha, Scanner entrada, LinkedList<Seguradora> listaSeguradora) throws Exception{
+			if(listaSeguradora.isEmpty()) {
+				System.out.println("Nao ha seguradoras, crie uma com seus respectivos clientes e sinistros e volte");
+				return;
+			}
 			MenuExcluir op = MenuExcluir.deIntpraEnum(escolha);
 			switch (op) {
 			case CLIENTE:
+				Seguradora seg = null;
+				System.out.println("Digite o nome da seguradora a qual o cliente pertence");
+				String nomeseg = entrada.nextLine();
+				seg  = Validacao.haSist(listaSeguradora, nomeseg, seg, entrada);
+				if(seg == null)
+					return;
+				System.out.println("Digite o CPF ou CNPJ do cliente");
+				String id = entrada.nextLine();
+				boolean rcliente = seg.removerCliente(id);
+				if(rcliente == true)
+					System.out.println("Cliente removido com sucesso");
 				break;
 			case VEICULO:
+			System.out.println("Digite o nome da seguradora a qual o cliente pertence");
+				Seguradora s = null;
+				String nomes = entrada.nextLine();
+				s  = Validacao.haSist(listaSeguradora, nomes, s, entrada);
+				if(s == null)
+					return;
+				System.out.println("Digite o CPF ou CNPJ do cliente");
+				String iden= entrada.nextLine();
+				Cliente c = Validacao.achaCliente(s, iden);
+				System.out.println("Digite a placa do veiculo que quer remover:");
+				String placa = entrada.nextLine();
+				boolean removeu = c.removeVeiculo(placa.toUpperCase());
+				if(removeu == false)
+					System.out.println("nao foi possivel remover o veiculo pois o cliente nao o possuia");
+				else
+					s.calcularPrecoSeguroCliente(iden); 
+					System.out.println("Veiculo removido com sucesso");
 				break;
 			case SINISTRO:
+				int continua;
+				Seguradora seguradora = null;
+				System.out.println("Digite o nome da seguradora a qual o cliente dono do sinistro pertence: ");
+				String segu = entrada.nextLine();
+				seguradora = Validacao.haSist(listaSeguradora, segu, seguradora, entrada);
+				if(seguradora == null){
+					return;
+				}
+				System.out.println("Digite o CPF/CNPJ do cliente cujo(s) sinistro(s) quer remover");
+				String doc = entrada.nextLine();
+				do{
+				seguradora.visualizarSinistro(doc);
+				System.out.println("Digite 5 para remover um desses sinistros e 6 para parar");
+				continua = entrada.nextInt();
+				if(continua == 5){
+					System.out.println("Digite o cpf/ cnpj do cliente a quem pertence o sinistro");
+					String cliente = entrada.nextLine();
+					System.out.println("Digite a data em que ocorreu o sinistro (dd/MM/aaaa)");
+					SimpleDateFormat dataformat = new SimpleDateFormat("dd/MM/yyyy");
+					String data = entrada.nextLine();
+					Date datasin = dataformat.parse(data);
+					seguradora.removeSinistro(cliente, datasin);
+				}
+				}while(continua != 6);
 				break;
 			case VOLTAR:
 				return;
@@ -255,14 +294,70 @@ public class AppMain {
 			MenuListar op = MenuListar.deIntpraEnum(escolha);
 			switch(op) {
 			case CLIENTE:
+				Seguradora seg = null;
+				String tipo = null;
+				System.out.println("Digite o nome da seguradora que voce quer listar os clientes");
+				String s = entrada.nextLine();
+				seg = Validacao.haSist(listaseguradoras, s, seg, entrada);
+				if(seg == null)
+					return;
+				do{
+					System.out.println("Digite o tipo de cliente que voce quer listar (PF/PJ)");
+					tipo = entrada.nextLine();
+				}while(!(tipo.toUpperCase().equals("PF")) || !(tipo.toUpperCase().equals("PJ")));
+				System.out.println(seg.listarClientes(tipo.toUpperCase()));
 				break;
 			case SINISTRO_SEG:
+				System.out.println("Digite o nome da seguradora que quer listar os sinistros");
+				String nomes = entrada.nextLine();
+				Seguradora segu = null;
+				segu = Validacao.haSist(listaseguradoras, nomes, segu, entrada);
+				if(segu == null){
+					return;
+				}
+				System.out.println("Todos os sinistros associados a essa seguradora sao:\n");
+				System.out.println(segu.listarSinistros());
 				break;
 			case SINISTRO_CLIENTE:
+				Seguradora segs = null;
+				System.out.println("Digite o nome da seguradora a qual o cliente pertence");
+				String nomeseg = entrada.nextLine();
+				segs = Validacao.haSist(listaseguradoras, nomeseg, segs, entrada);
+				if(segs == null){
+					return;
+				}
+				System.out.println("Digite o CPF/CNPJ da pessoa cujos sinistros quer listar");
+				String id = entrada.nextLine();
+				segs.visualizarSinistro(id);
 				break;
 			case VEICULO_CLIENTE:
+				Cliente cliente = null;
+				System.out.println("Digite o nome da seguradora a qual o cliente pertence");
+				String n = entrada.nextLine();
+				Seguradora seguradora = null;
+				seguradora = Validacao.haSist(listaseguradoras, n, seguradora, entrada);
+				if(seguradora == null){
+					return;
+				}
+				System.out.println("Digite o CPF/ CNPJ do cliente");
+				String iden = entrada.nextLine();
+				cliente = Validacao.achaCliente(seguradora, iden);
+				if(cliente == null){
+					System.out.println("cliente nao pertence a seguradora, tente novamente");
+					return;
+				}
+				System.out.println(cliente.listarVeiculos());
 				break;
 			case VEICULO_SEGURADORA:
+				System.out.println("Digite o nome da seguradora cujos veiculos quer ver");
+				String nome = entrada.nextLine();
+				Seguradora sees = null;
+				sees = Validacao.haSist(listaseguradoras, nome, sees, entrada);
+				if(sees == null){
+					return;
+				}
+				System.out.println("Os veiculos associados a essa seguradora sao: ");
+				System.out.println(sees.listarVeiculos());
 				break;
 			case VOLTAR:
 				return;
@@ -283,7 +378,7 @@ public class AppMain {
 				do{
 				System.out.println("Qual tipo de cliente quer cadastrar(PF/PJ)?");
 				tipo = entrada.nextLine();
-				} while((!tipo.equals("PJ")) || (!tipo.equals("PF")));
+				} while((!tipo.toUpperCase().equals("PJ")) || (!tipo.toUpperCase().equals("PF")));
 				System.out.println("Digite o nome da seguradora que na qual quer cadastrar o cliente");
 				String nomeS = entrada.nextLine();
 				Seguradora SegS = null;
@@ -291,11 +386,11 @@ public class AppMain {
 				if(SegS == null){
 					return;
 				}
-				if(tipo.equals("PF")){
+				if(tipo.toUpperCase().equals("PF")){
 					criaClientePF(SegS, entrada);
 					break;
 				}
-				else if(tipo.equals("PJ")){
+				else if(tipo.toUpperCase().equals("PJ")){
 					criaClientePJ(SegS, entrada);
 					break;
 				}
@@ -319,10 +414,12 @@ public class AppMain {
 				c.adicionaVeiculo(v);
 				System.out.println("Veiculo adicionado com sucesso");
 				segs.calcularPrecoSeguroCliente(id);
+				break;
 			case SEGURADORA: 
 				Seguradora seguradora = criaSeguradora(entrada);
 				listaseguradoras.add(seguradora);
 				System.out.println("Seguradora cadastrada com sucesso");
+				break;
 			case VOLTAR:
 				return;
 			default:

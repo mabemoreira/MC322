@@ -106,13 +106,13 @@ public class Validacao {
 		for(Cliente value: seguradora.getMapaClientes().values()){
 			if(value instanceof ClientePF){
 				ClientePF inter = (ClientePF) value;
-				if(inter.getCPF().equals(id)){
+				if(inter.getCPF().equals(id.replaceAll("[^\\d]",""))){
 					c = inter;
 				}
 			}
 			else if(value instanceof ClientePJ){
 				ClientePJ inter = (ClientePJ) value;
-				if(inter.getCNPJ().equals(id)){
+				if(inter.getCNPJ().equals(id.replaceAll("[^\\d]",""))){
 					c = inter;
 				}
 			}

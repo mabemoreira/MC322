@@ -119,7 +119,7 @@ public class Seguradora {
 	
 	public boolean visualizarSinistro(String cliente) {
 		boolean flag = false;
-		System.out.println(" O(s) sinistro(s) da seguradora " + this.toString(1) + " correspondente(s) a sua pesquisa sao: ");
+		System.out.println("Todos os sinistros cadastrados para essa pessaoa sao: ");
 		for(Sinistro value: mapaSinistros.values()) {
 			if(value.getCliente() instanceof ClientePF){
 				ClientePF clientecast = (ClientePF) value.getCliente();
@@ -142,6 +142,37 @@ public class Seguradora {
 		
 }
 	
+
+	public boolean removeSinistro(String cliente, Date data){
+		Sinistro sinistro = null;
+		for(Sinistro value: mapaSinistros.values()){
+			Cliente intermediario = value.getCliente();
+			if(intermediario instanceof ClientePF){
+				ClientePF clientepf = (ClientePF) intermediario;
+				if(clientepf.getCPF().equals(cliente) && (value.getData().compareTo(data) == 0)){
+					sinistro = mapaSinistros.remove(value.getID());
+					if(sinistro == null){
+						System.out.println("Esse sinistro nao pertence a essa seguradora, tente de novo");
+						return false;
+					}
+				}
+
+			}
+			else if(intermediario instanceof ClientePJ){
+				ClientePJ clientepj = (ClientePJ) intermediario;
+				if(clientepj.getCNPJ().equals(cliente) && (value.getData().compareTo(data) == 0)){
+					sinistro = mapaSinistros.remove(value.getID());
+					if(sinistro == null){
+						System.out.println("Esse sinistro nao pertence a essa seguradora, tente de novo");
+						return false;
+					}
+				}
+			}
+		}
+		System.out.println("Sinistro removido com sucesso");
+		return true;
+	}
+
 	public double calcularPrecoSeguroCliente(String cliente) {
 		int contador = 0;
 		double preco;
@@ -181,7 +212,15 @@ public class Seguradora {
 		return soma;
 	}
 	
-	
+	public String listarVeiculos(){
+		StringBuilder total = new StringBuilder();
+		for(Cliente value: mapaClientes.values()){
+			total.append(value.listarVeiculos());
+		}
+		return total.toString().equals("")? "nao ha veiculos associados a seguradora" : total.toString();
+
+	}
+
 	public String toString() {
 		return "A seguradora " + nome + " de telefone " + telefone + " localizada no endereco " + endereco + " com email "
 				+ email + " possui os seguintes clientes pessoa física:\n " + this.listarClientes("PF") + " e os seguintes clientes do tipo pessoa juridica:\n "

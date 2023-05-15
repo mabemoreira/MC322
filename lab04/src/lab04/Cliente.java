@@ -48,6 +48,7 @@ public class Cliente {
 	
 	public String listarVeiculos() {
 		StringBuilder total = new StringBuilder();
+		total.append("Os veiculos do cliente sao: ");
 		for(Veiculo value: mapaVeiculos.values()) {
 			total.append(value.toString());
 			total.append("\n");
