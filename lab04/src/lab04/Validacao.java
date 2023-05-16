@@ -122,4 +122,47 @@ public class Validacao {
 		return c;
 	}
 
+
+
+
+public static boolean validaTelefone(String telefone){
+	String sobra = telefone.replaceAll("[0-9\\s-]", "");
+	return (sobra.equals(""));
+}
+
+public static boolean validaPlaca(String placa){
+	String sobra = placa.replaceAll("[0-9A-Za-z]", "");
+	return (sobra.equals(""));
+}
+
+public static boolean validaData(String data){
+	if (data.length() < 10)
+		return false;
+	boolean vale = data.matches("\\d{2}/\\d{2}/\\d{4}");
+	String ano = Character.toString(data.charAt(6)) + Character.toString(data.charAt(7)) + Character.toString(data.charAt(8)) + Character.toString(data.charAt(9));
+	String dia = Character.toString(data.charAt(0)) + Character.toString(data.charAt(1));
+	String mes = Character.toString(data.charAt(3)) + Character.toString(data.charAt(4));
+	int anonum = Integer.parseInt(ano);
+	int dianum = Integer.parseInt(dia);
+	int mesnum = Integer.parseInt(mes);
+	if(!vale)
+	return false;
+	if(anonum > 2023)
+		return false;
+	if (mesnum == 2){
+		if ((anonum%4 != 0) && dianum > 28)
+			return false;
+		else if(anonum % 4 == 0 && dianum > 29)
+			return false;
+	}
+	if((mesnum == 1 || mesnum == 3 || mesnum == 5 || mesnum == 7 || mesnum == 8 || mesnum == 10 || mesnum == 12) && dianum > 31)
+		return false;
+	
+	else if ((mesnum == 4 || mesnum == 6 || mesnum == 9 || mesnum == 11) && dianum > 30)
+		return false;
+	return true;
+}
+
+
+
 }

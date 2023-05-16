@@ -48,7 +48,6 @@ public class Cliente {
 	
 	public String listarVeiculos() {
 		StringBuilder total = new StringBuilder();
-		total.append("Os veiculos do cliente sao: ");
 		for(Veiculo value: mapaVeiculos.values()) {
 			total.append(value.toString());
 			total.append("\n");
@@ -69,7 +68,7 @@ public class Cliente {
 	
 	public String toString() {
 	return	" O cliente " + nome + " que reside em " + endereco + " possui o(s) seguinte(s) veiculo(s):\n " + this.listarVeiculos() 
-	+ "e tem o seguinte valor de seguro" + valorSeguro;
+	+ "e tem o seguinte valor de seguro " + valorSeguro;
 	}
 	
 	public double calculaScore() {

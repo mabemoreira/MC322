@@ -38,6 +38,6 @@ public class ClientePJ extends Cliente{
 
 	public String toString() {		
 		return "a pessoa física de nome " + this.getNome() + " e endereco " + this.getEndereco() + " foi fundada em " + dataFundacao + " e possui CNPJ " + CNPJ
-				+ " e possui o(s) seguinte(s) veiculo(s)\n" + super.listarVeiculos(); 
+				+ " e possui o(s) seguinte(s) veiculo(s)\n" + super.listarVeiculos() + " e seu seguro vale " + this.getValorSeguro(); 
 		}
 }

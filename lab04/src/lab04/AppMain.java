@@ -36,17 +36,20 @@ public class AppMain {
 
 		private static Seguradora criaSeguradora(Scanner entrada) {
 			System.out.println("Otimo! qual o nome da sua seguradora?");
-			String nomeSeguradora = entrada.nextLine();
-			nomeSeguradora = nomeSeguradora.replace("\n","");
+			String nomeSeguradora = entrada.nextLine(); // deixei ter numero aqui pq pode ser branding 
 			System.out.println("E qual o endereco dela?");
 			String enderecoSeguradora = entrada.nextLine();
-			enderecoSeguradora = enderecoSeguradora.replace("\n","");
 			System.out.println("E o telefone?");
 			String telefoneSeguradora = entrada.nextLine();
-			telefoneSeguradora = telefoneSeguradora.replace("\n","");
+			boolean telefonepas = Validacao.validaTelefone(telefoneSeguradora);
+			while(!telefonepas){
+				System.out.println("telefone invalido digite novamente");
+				telefoneSeguradora = entrada.nextLine();
+				telefonepas = Validacao.validaTelefone(telefoneSeguradora);
+			}
 			System.out.println("Por ultimo, qual o email dela?");
 			String emailSeguradora = entrada.nextLine();
-			emailSeguradora = emailSeguradora.replace("\n","");
+// nao validei pq nao sei se arroba ta nos caracteres proibidos 
 			Seguradora seguradora = new Seguradora(nomeSeguradora, telefoneSeguradora, emailSeguradora, enderecoSeguradora);
 			return seguradora;
 		}
@@ -54,13 +57,16 @@ public class AppMain {
 		private static Veiculo criaVeiculo(Scanner entrada) {
 			System.out.println("Qual a placa do veiculo?");
 			String placa = entrada.nextLine();
-			placa = placa.replace("\n","");
+			boolean placapas = Validacao.validaPlaca(placa);
+			while(!placapas){
+				System.out.println("Placa invalida digite novamente");
+				placa = entrada.nextLine();
+				placapas = Validacao.validaData(placa);
+			}
 			System.out.println("Qual o modelo dele?");
 			String modelo = entrada.nextLine();
-			modelo = modelo.replace("\n","");
 			System.out.println("Qual a marca dele?");
 			String marca = entrada.nextLine();
-			marca = marca.replace("\n","");
 			System.out.println("Em que ano ele foi fabricado?");
 			int anoFabricacao = entrada.nextInt();
 			entrada.nextLine();// come \n
@@ -70,37 +76,46 @@ public class AppMain {
 		private static ClientePF criaClientePF(Seguradora seguradora, Scanner entrada) throws Exception {
 			System.out.println("Qual o nome do seu cliente?");
 			String nomeCliente = entrada.nextLine();
-			nomeCliente = nomeCliente.replace("\n","");
+			boolean nomepas = Validacao.validaNome(nomeCliente);
+			while(!nomepas){
+				System.out.println("Nome invalido digite novamente");
+				nomeCliente = entrada.nextLine();
+				nomepas = Validacao.validaNome(nomeCliente);
+			}
 			System.out.println("Qual o endereco do seu cliente?");
 			String enderecoCliente = entrada.nextLine();
-			enderecoCliente = enderecoCliente.replace("\n","");
 			System.out.println("Qual o CPF dele?");
 			String CPFCliente = entrada.nextLine();
-			CPFCliente = CPFCliente.replace("\n","");
 			while(!Validacao.validarCPF(CPFCliente)) {
 				System.out.println("Cliente com CPF invalido! tente de novo");
 			 	CPFCliente = entrada.nextLine();
-				CPFCliente = CPFCliente.replace("\n","");
 			}
 			System.out.println("Qual o aniversario dele? (dd/MM/yyyy)");
 			String dataNascimentoS = entrada.nextLine();
-			dataNascimentoS = dataNascimentoS.replace("\n","");
+			boolean aniversariopas = Validacao.validaData(dataNascimentoS);
+			while(!aniversariopas){
+				System.out.println("Data invalida digite novamente");
+				dataNascimentoS = entrada.nextLine();
+				aniversariopas = Validacao.validaData(dataNascimentoS);
+			}
 			SimpleDateFormat dataformat = new SimpleDateFormat("dd/MM/yyyy");
 			Date dataNascimento = dataformat.parse(dataNascimentoS);
 			System.out.println("E quando ele tirou a licenca? (dd/MM/yyyy)");
 			String dataLicencaS = entrada.nextLine();
-			dataLicencaS = dataLicencaS.replace("\n","");
+			boolean licencapas = Validacao.validaData(dataLicencaS);
+			while(!licencapas){
+				System.out.println("Data invalida digite novamente");
+				dataLicencaS = entrada.nextLine();
+				licencapas = Validacao.validaData(dataLicencaS);
+			}
 			SimpleDateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy"); // o chat gpt falou pra criar um novo cada vez que precisasse parse just to be safe 
 			Date dataLicenca = dateformat.parse(dataLicencaS);
 			System.out.println("Qual o genero do seu cliente?");
 			String genero = entrada.nextLine();
-			genero = genero.replace("\n","");
 			System.out.println("Qual o nivel de educacao do seu cliente?");
 			String educacao  = entrada.nextLine();
-			educacao = educacao.replace("\n","");
 			System.out.println("Qual a classe economica do seu cliente?");
 			String economica = entrada.nextLine();
-			economica = economica.replace("\n","");
 			ClientePF cliente = new ClientePF(CPFCliente, dataNascimento, nomeCliente, enderecoCliente, genero, educacao, economica, dataLicenca);
 			int cadastro;
 			boolean foi = seguradora.cadastrarCliente(cliente);
@@ -122,22 +137,24 @@ public class AppMain {
 		}
 
 		private static ClientePJ criaClientePJ(Seguradora seguradora, Scanner entrada) throws Exception{
-			System.out.println("Qual o nome do seu cliente?");
+			System.out.println("Qual o nome do seu cliente?"); // tb  nao to vlidando pq marca pode ter numero no nome 
 			String nomeCliente = entrada.nextLine();
-			nomeCliente = nomeCliente.replace("\n","");
 			System.out.println("Qual o endereco do seu cliente?");
 			String enderecoCliente = entrada.nextLine();
-			enderecoCliente = enderecoCliente.replace("\n","");
 			System.out.println("Qual o CNPJ dele?");
 			String CNPJCliente = entrada.nextLine();
-			CNPJCliente = CNPJCliente.replace("\n","");
 			if(!Validacao.validaCNPJ(CNPJCliente)) {
 				System.out.println("Cliente com CNPJ invalido! tente cadastrar outro cliente");
 				return null;
 			}
 			System.out.println("Quando a empresa foi fundada? (dd/MM/yyyy)");
 			String dataFundacaoS = entrada.nextLine();
-			dataFundacaoS = dataFundacaoS.replace("\n","");
+			boolean datapas = Validacao.validaData(dataFundacaoS);
+			while(!datapas){
+				System.out.println("Data invalida digite novamente");
+				dataFundacaoS = entrada.nextLine();
+				datapas = Validacao.validaData(dataFundacaoS);
+			}
 			SimpleDateFormat dataformat = new SimpleDateFormat("dd/MM/yyyy");
 			Date dataFundacao = dataformat.parse(dataFundacaoS);
 			System.out.println("Quantos funcionarios tem seu cliente?");
@@ -179,11 +196,16 @@ public class AppMain {
 		private static void criaSinistro(Seguradora seguradora, Scanner entrada) throws Exception{ // ja tinha no lab 3
 			System.out.println("Quando ocorreu o sinistro? (dd/MM/aaaa)");
 			String data = entrada.nextLine();
+			boolean datapas = Validacao.validaData(data);
+			while(!datapas){
+				System.out.println("Data invalida digite novamente");
+				data= entrada.nextLine();
+				datapas = Validacao.validaData(data);
+			}
 			SimpleDateFormat dataformat = new SimpleDateFormat("dd/MM/yyyy");
 			Date date = dataformat.parse(data);
 			System.out.println("Onde ocorreu o sinistro?");
 			String endereco = entrada.nextLine();
-			endereco = endereco.replace("\n","");
 			 // turns out que seguradoras cobrirem sinistros de quando os clientes nao eram clientes deles quebraria o modelo de negocios das seguradoras
 			Cliente cliente = null;
 			Veiculo veiculo = null;
@@ -215,8 +237,18 @@ public class AppMain {
 			   }
 			   else if(veiculo == null){
 				System.out.println("Esse veiculo nao pertence a esse cliente, tente adiciona-lo a ele ou transferir o seguro e depois gerar o sinistro");
+				return;
 			   }
 			   seguradora.gerarSinistro(date, endereco, veiculo, cliente);
+			   if(cliente instanceof ClientePF){
+				ClientePF novocliente = (ClientePF) cliente;
+				seguradora.calcularPrecoSeguroCliente(novocliente.getCPF());
+			   }
+			   else if(cliente instanceof ClientePJ){
+				ClientePJ novocliente = (ClientePJ) cliente;
+				seguradora.calcularPrecoSeguroCliente(novocliente.getCNPJ());
+			   }
+			   
 		 	System.out.println("Seu sinistro foi cadastrado com sucesso");
 			}
 			
@@ -259,9 +291,11 @@ public class AppMain {
 				System.out.println("Digite a placa do veiculo que quer remover:");
 				String placa = entrada.nextLine();
 				boolean removeu = c.removeVeiculo(placa.toUpperCase());
-				if(removeu == false)
+				if(removeu == false){
 					System.out.println("nao foi possivel remover o veiculo pois o cliente nao o possuia");
-				else
+					return;
+				}
+				else 
 					s.calcularPrecoSeguroCliente(iden); 
 					System.out.println("Veiculo removido com sucesso");
 				break;
@@ -282,13 +316,17 @@ public class AppMain {
 				continua = entrada.nextInt();
 				entrada.nextLine();
 				if(continua == 5){
-					System.out.println("Digite o cpf/ cnpj do cliente a quem pertence o sinistro");
-					String cliente = entrada.nextLine();
 					System.out.println("Digite a data em que ocorreu o sinistro (dd/MM/aaaa)");
 					SimpleDateFormat dataformat = new SimpleDateFormat("dd/MM/yyyy");
 					String data = entrada.nextLine();
+					boolean datapas = Validacao.validaData(data);
+					while(!datapas){
+					System.out.println("Data invalida digite novamente");
+					data = entrada.nextLine();
+					datapas = Validacao.validaData(data);
+			}
 					Date datasin = dataformat.parse(data);
-					seguradora.removeSinistro(cliente, datasin);
+					seguradora.removeSinistro(doc, datasin);
 				}
 				}while(continua != 6);
 				break;
@@ -359,6 +397,7 @@ public class AppMain {
 					System.out.println("cliente nao pertence a seguradora, tente novamente");
 					return;
 				}
+				System.out.println("Os veiculos pertencentes ao cliente sao: ");
 				System.out.println(cliente.listarVeiculos());
 				break;
 			case VEICULO_SEGURADORA:
@@ -534,7 +573,7 @@ public class AppMain {
 				}
 				HashMap <String, Veiculo> recebe = c1.getMapaVeiculos();
 				System.out.println("os precos antigos dos seguros dos clientes sao, respectivamente: " + c1.getValorSeguro() + " e " + c2.getValorSeguro() + " reais");
-				c2.setMapaVeiculos(recebe);
+				c2.getMapaVeiculos().putAll(recebe);
 				s2.calcularPrecoSeguroCliente(id2);
 				c1.getMapaVeiculos().clear();
 				s1.calcularPrecoSeguroCliente(id1);
@@ -577,7 +616,7 @@ public class AppMain {
 		quit = MenuPrincipal(escolha,entrada,listaSeguradoras);
 		} while(quit != 1);
 		entrada.close();
-		System.out.println("Obrigada por utilizar o menu!"); // testar listas e validar 
+		System.out.println("Obrigada por utilizar o menu!"); 
 		
 	}
 }

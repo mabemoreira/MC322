@@ -161,7 +161,7 @@ public class Seguradora {
 			else if(intermediario instanceof ClientePJ){
 				ClientePJ clientepj = (ClientePJ) intermediario;
 				if(clientepj.getCNPJ().equals(cliente) && (value.getData().compareTo(data) == 0)){
-					sinistro = mapaSinistros.remove(value.getID());
+					sinistro = mapaSinistros.remove(value.getID()); // usando o remove 
 					if(sinistro == null){
 						System.out.println("Esse sinistro nao pertence a essa seguradora, tente de novo");
 						return false;
@@ -169,6 +169,11 @@ public class Seguradora {
 				}
 			}
 		}
+		if(sinistro == null){
+			System.out.println("Esse sinistro nao pertence a essa seguradora, tente de novo");
+				return false;
+		}
+		this.calcularPrecoSeguroCliente(cliente);
 		System.out.println("Sinistro removido com sucesso");
 		return true;
 	}
