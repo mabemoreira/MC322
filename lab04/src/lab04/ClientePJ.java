@@ -31,6 +31,8 @@ public class ClientePJ extends Cliente{
 	}
 	
 	public double calculaScore(){
+		if(this.getMapaVeiculos().size() == 0)
+			return 0;
 		return (CalcSeguro.VALOR_BASE.getFator()* (1 + (qtdeFuncionarios/100)) * this.getMapaVeiculos().size());
 	}
 

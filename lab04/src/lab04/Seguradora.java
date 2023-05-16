@@ -197,9 +197,12 @@ public class Seguradora {
 				}
 			}
 		}
-
-		preco = ele.calculaScore() * (1 + contador); // FUNCAO DA SEGURADORA RECALCULAR SCORE
-		ele.setValorSeguro(preco); 
+		if(ele == null)
+			preco = 0; // nao ha sinistros de qq jeito
+		else
+			preco = ele.calculaScore() * (1 + contador); // FUNCAO DA SEGURADORA RECALCULAR SCORE
+		Cliente c = Validacao.achaCliente(this, cliente); // pra nao dar problema de null pointer 
+		c.setValorSeguro(preco);
 		return preco;
 	}
 	

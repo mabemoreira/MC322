@@ -3,7 +3,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Scanner;
-
+import java.util.HashMap;
 
 
 
@@ -103,16 +103,18 @@ public class AppMain {
 			economica = economica.replace("\n","");
 			ClientePF cliente = new ClientePF(CPFCliente, dataNascimento, nomeCliente, enderecoCliente, genero, educacao, economica, dataLicenca);
 			int cadastro;
+			boolean foi = seguradora.cadastrarCliente(cliente);
 			do {
 			System.out.println("Para cadastrar um novo veiculo para seu cliente, aperte '1', se estiver satisfeito, aperte '0'");
 			cadastro = entrada.nextInt();
-			entrada.nextLine(); //come o \n;
+			entrada.nextLine();
 			if(cadastro == 1) {
 				Veiculo veiculo = criaVeiculo(entrada);
 				cliente.adicionaVeiculo(veiculo);
+				seguradora.calcularPrecoSeguroCliente(CPFCliente);
 				}
 			}while(cadastro != 0);
-			if(seguradora.cadastrarCliente(cliente)){
+			if(foi){
 				System.out.println("Seu cliente foi cadastrado na seguradora com sucesso");
 				return cliente;
 			}
@@ -142,9 +144,8 @@ public class AppMain {
 			int func = entrada.nextInt();
 			entrada.nextLine();
 			ClientePJ cliente = new ClientePJ (CNPJCliente, dataFundacao, nomeCliente, enderecoCliente, func);
+			boolean foi = seguradora.cadastrarCliente(cliente);
 			int cadastro;
-			func = entrada.nextInt();
-			entrada.nextLine();
 			do {
 			System.out.println("Para cadastrar um novo veiculo para seu cliente, aperte '1', se estiver satisfeito, aperte '0'");
 			cadastro = entrada.nextInt();
@@ -154,10 +155,11 @@ public class AppMain {
 				if(cliente instanceof ClientePJ) {
 					cliente = (ClientePJ) cliente;
 					cliente.adicionaVeiculo(veiculo);
+					seguradora.calcularPrecoSeguroCliente(CNPJCliente);
 				}
 			}
 			}while(cadastro != 0);
-			if(seguradora.cadastrarCliente(cliente)){
+			if(foi){
 				System.out.println("Seu cliente foi cadastrado na seguradora com sucesso");
 				return cliente;
 			}
@@ -182,7 +184,7 @@ public class AppMain {
 			System.out.println("Onde ocorreu o sinistro?");
 			String endereco = entrada.nextLine();
 			endereco = endereco.replace("\n","");
-			entrada.nextLine(); // turns out que seguradoras cobrirem sinistros de quando os clientes nao eram clientes deles quebraria o modelo de negocios das seguradoras
+			 // turns out que seguradoras cobrirem sinistros de quando os clientes nao eram clientes deles quebraria o modelo de negocios das seguradoras
 			Cliente cliente = null;
 			Veiculo veiculo = null;
 				System.out.println("Insira o cpf/cnpj do cliente para localiza-lo");
@@ -250,6 +252,10 @@ public class AppMain {
 				System.out.println("Digite o CPF ou CNPJ do cliente");
 				String iden= entrada.nextLine();
 				Cliente c = Validacao.achaCliente(s, iden);
+				if(c == null){
+					System.out.println("Esse cliente nao pertence a essa seguradora tente novamente");
+					return;
+				}
 				System.out.println("Digite a placa do veiculo que quer remover:");
 				String placa = entrada.nextLine();
 				boolean removeu = c.removeVeiculo(placa.toUpperCase());
@@ -470,6 +476,7 @@ public class AppMain {
 					break;
 				}
 				criaSinistro(seguradora, entrada);
+				break;
 			case TRANSFERIR_SINISTRO:
 				if(listaseguradoras.size() == 0){
 					System.out.println("Voce ainda nao criou seguradoras, crie e volte aqui");
@@ -504,7 +511,7 @@ public class AppMain {
 					c1 = Validacao.achaCliente(s1,id1);
 					}
 					else if(ex == 6){
-						break;
+						return 0;
 					}
 				}
 				System.out.println("Digite o CNPJ ou CPF do segundo cliente:");
@@ -516,21 +523,23 @@ public class AppMain {
 					int ex = entrada.nextInt();
 					entrada.nextLine();
 					if(ex == 5){
+					System.out.println("tente de novo: ");
 					id2 = entrada.nextLine();
 					id2 = id2.replaceAll("[^\\d]","");
 					c2 = Validacao.achaCliente(s2,id2);
 					}
 					else if(ex == 6){
-						break;
+						return 0;
 					}
 				}
+				HashMap <String, Veiculo> recebe = c1.getMapaVeiculos();
 				System.out.println("os precos antigos dos seguros dos clientes sao, respectivamente: " + c1.getValorSeguro() + " e " + c2.getValorSeguro() + " reais");
-				c2.setMapaVeiculos(c1.getMapaVeiculos());
+				c2.setMapaVeiculos(recebe);
 				s2.calcularPrecoSeguroCliente(id2);
 				c1.getMapaVeiculos().clear();
 				s1.calcularPrecoSeguroCliente(id1);
 				System.out.println("os precos novos dos seguros dos clientes sao, respectivamente: " + c1.getValorSeguro() + " e " + c2.getValorSeguro() + " reais");
-
+				break;
 			case CALCULAR_RECEITA:
 				if(listaseguradoras.size() == 0){
 					System.out.println("Voce ainda nao criou seguradora, crie uma e volte aqui");
@@ -543,7 +552,8 @@ public class AppMain {
 				if(s == null){
 					break;
 				}
-				System.out.println("A receita da seguradora" + s.getNome() + "eh" + s.calcularReceita());
+				System.out.println("A receita da seguradora "  + s.getNome() + " eh " + s.calcularReceita());
+				break;
 			case SAIR:
 				return 1;
 			default:
@@ -567,6 +577,7 @@ public class AppMain {
 		quit = MenuPrincipal(escolha,entrada,listaSeguradoras);
 		} while(quit != 1);
 		entrada.close();
-		System.out.println("Obrigada por utilizar o menu!");
+		System.out.println("Obrigada por utilizar o menu!"); // testar listas e validar 
+		
 	}
 }

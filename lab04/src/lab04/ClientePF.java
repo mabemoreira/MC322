@@ -65,7 +65,9 @@ public class ClientePF extends Cliente{
 	
 	@SuppressWarnings("deprecation")
 	public double calculaScore() {
-		if((2023 - (dataNascimento.getYear()+1900) >= 18) && (2023 - (dataNascimento.getYear()+1900)< 30))
+		if (this.getMapaVeiculos().size() == 0)
+			return 0;
+		else if((2023 - (dataNascimento.getYear()+1900) >= 18) && (2023 - (dataNascimento.getYear()+1900)< 30))
 			return(CalcSeguro.VALOR_BASE.getFator() * CalcSeguro.FATOR_18_30.getFator() * this.getMapaVeiculos().size());
 		else if((2023 - (dataNascimento.getYear()+1900) >= 30) && (2023 - (dataNascimento.getYear()+1900)< 60))
 			return(CalcSeguro.VALOR_BASE.getFator() * CalcSeguro.FATOR_30_60.getFator() * this.getMapaVeiculos().size());

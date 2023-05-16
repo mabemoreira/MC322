@@ -91,9 +91,11 @@ public class Validacao {
 		while(seg == null){
 			System.out.println("Nao ha essa seguradora no sistema, aperte 5 para digitar outro nome ou 6 para voltar");
 					int esc = entrada.nextInt();
+					entrada.nextLine();
 					if(esc == 6)
 						return null;
 					else if(esc == 5){
+						System.out.println("digite o novo nome: ");
 						nomeseg = entrada.nextLine();
 						seg = Validacao.haSeg(listasegs, nomeseg);
 					}
