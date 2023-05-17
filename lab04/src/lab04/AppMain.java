@@ -52,9 +52,9 @@ public class AppMain {
 // nao validei pq nao sei se arroba ta nos caracteres proibidos 
 			Seguradora seguradora = new Seguradora(nomeSeguradora, telefoneSeguradora, emailSeguradora, enderecoSeguradora);
 			return seguradora;
-		}
+		} 
 
-		private static Veiculo criaVeiculo(Scanner entrada) {
+		private static Veiculo criaVeiculo(Scanner entrada) {              // eu poderia validar as placas dos clientes mas honestamente nao sei se um carro pode ser de 2 pessoas por lei
 			System.out.println("Qual a placa do veiculo?");
 			String placa = entrada.nextLine();
 			boolean placapas = Validacao.validaPlaca(placa);
@@ -68,8 +68,19 @@ public class AppMain {
 			System.out.println("Qual a marca dele?");
 			String marca = entrada.nextLine();
 			System.out.println("Em que ano ele foi fabricado?");
-			int anoFabricacao = entrada.nextInt();
-			entrada.nextLine();// come \n
+			int anoFabricacao = 0;
+			String anoFabricacaoS = entrada.nextLine();
+			boolean escolhavalida = false;
+			while(!escolhavalida){
+			try{
+				anoFabricacao = Integer.parseInt(anoFabricacaoS);
+				escolhavalida = true;
+			} 
+			catch(NumberFormatException e){
+				System.out.println("Entrada invalida, por favor digite um numero:");
+				anoFabricacaoS = entrada.nextLine();
+			}
+			}
 			Veiculo veiculo = new Veiculo(placa, marca, modelo, anoFabricacao);
 			return veiculo;
 		}
@@ -89,6 +100,10 @@ public class AppMain {
 			while(!Validacao.validarCPF(CPFCliente)) {
 				System.out.println("Cliente com CPF invalido! tente de novo");
 			 	CPFCliente = entrada.nextLine();
+			}
+			if(seguradora.getMapaClientes().containsKey(CPFCliente.replaceAll("[^\\d]",""))){
+				System.out.println("Esse cliente já está cadastrado nessa seguradora, tente cadastrar outro cliente ou cadastra lo em outra");
+				return null;
 			}
 			System.out.println("Qual o aniversario dele? (dd/MM/yyyy)");
 			String dataNascimentoS = entrada.nextLine();
@@ -121,8 +136,19 @@ public class AppMain {
 			boolean foi = seguradora.cadastrarCliente(cliente);
 			do {
 			System.out.println("Para cadastrar um novo veiculo para seu cliente, aperte '1', se estiver satisfeito, aperte '0'");
-			cadastro = entrada.nextInt();
-			entrada.nextLine();
+			cadastro = 0;
+			String cadastroS = entrada.nextLine();
+			boolean escolhavalida = false;
+				while(!escolhavalida){
+				try{
+					cadastro = Integer.parseInt(cadastroS);
+					escolhavalida = true;
+				} 
+				catch(NumberFormatException e){
+					System.out.println("Entrada invalida, por favor digite um numero:");
+					cadastroS = entrada.nextLine();
+				}
+				}
 			if(cadastro == 1) {
 				Veiculo veiculo = criaVeiculo(entrada);
 				cliente.adicionaVeiculo(veiculo);
@@ -147,6 +173,10 @@ public class AppMain {
 				System.out.println("Cliente com CNPJ invalido! tente cadastrar outro cliente");
 				return null;
 			}
+			if(seguradora.getMapaClientes().containsKey(CNPJCliente.replaceAll("[^\\d]",""))){
+				System.out.println("Esse cliente já está cadastrado nessa seguradora, tente cadastrar outro cliente ou cadastra lo em outra");
+				return null;
+			}
 			System.out.println("Quando a empresa foi fundada? (dd/MM/yyyy)");
 			String dataFundacaoS = entrada.nextLine();
 			boolean datapas = Validacao.validaData(dataFundacaoS);
@@ -158,15 +188,37 @@ public class AppMain {
 			SimpleDateFormat dataformat = new SimpleDateFormat("dd/MM/yyyy");
 			Date dataFundacao = dataformat.parse(dataFundacaoS);
 			System.out.println("Quantos funcionarios tem seu cliente?");
-			int func = entrada.nextInt();
-			entrada.nextLine();
+			int func = 0;
+			String funcS = entrada.nextLine();
+			boolean escolhavalida = false;
+			while(!escolhavalida){
+			try{
+				func = Integer.parseInt(funcS);
+				escolhavalida = true;
+			} 
+			catch(NumberFormatException e){
+				System.out.println("Entrada invalida, por favor digite um numero:");
+				funcS = entrada.nextLine();
+			}
+			}
 			ClientePJ cliente = new ClientePJ (CNPJCliente, dataFundacao, nomeCliente, enderecoCliente, func);
 			boolean foi = seguradora.cadastrarCliente(cliente);
 			int cadastro;
 			do {
 			System.out.println("Para cadastrar um novo veiculo para seu cliente, aperte '1', se estiver satisfeito, aperte '0'");
-			cadastro = entrada.nextInt();
-			entrada.nextLine();
+			cadastro = 0;
+			boolean escolhA = false;
+			String cadastroS = entrada.nextLine();
+			while(!escolhA){
+			try{
+				cadastro = Integer.parseInt(cadastroS);
+				escolhA = true;
+			} 
+			catch(NumberFormatException e){
+				System.out.println("Entrada invalida, por favor digite um numero:");
+				cadastroS = entrada.nextLine();
+			}
+			}
 			if(cadastro == 1) {
 				Veiculo veiculo = criaVeiculo(entrada);
 				if(cliente instanceof ClientePJ) {
@@ -313,8 +365,19 @@ public class AppMain {
 				do{
 				seguradora.visualizarSinistro(doc);
 				System.out.println("Digite 5 para remover um desses sinistros e 6 para parar");
-				continua = entrada.nextInt();
-				entrada.nextLine();
+				continua = 6;
+				String continuaS = entrada.nextLine();
+						boolean escolhavalida = false;
+				while(!escolhavalida){
+				try{
+					escolha = Integer.parseInt(continuaS);
+					escolhavalida = true;
+				} 
+				catch(NumberFormatException e){
+					System.out.println("Entrada invalida, por favor digite um numero:");
+					continuaS = entrada.nextLine();
+				}
+				}
 				if(continua == 5){
 					System.out.println("Digite a data em que ocorreu o sinistro (dd/MM/aaaa)");
 					SimpleDateFormat dataformat = new SimpleDateFormat("dd/MM/yyyy");
@@ -485,21 +548,55 @@ public class AppMain {
 			switch(op) {
 			case CADASTRAR:
 				System.out.println("Para cadastrar cliente aperte: 1\nPara cadastrar veiculo aperte: 2\nPara cadastrar seguradora aperte: 3\nPara voltar aperte: 4");
-				escolha = entrada.nextInt();
-				entrada.nextLine();
+				escolha = 4;
+				String escolhA = entrada.nextLine();
+				boolean escolhavalida = false;
+				while(!escolhavalida){
+				try{
+					escolha = Integer.parseInt(escolhA);
+					escolhavalida = true;
+				} 
+				catch(NumberFormatException e){
+					System.out.println("Entrada invalida, por favor digite um numero:");
+					escolhA = entrada.nextLine();
+				}
+				}
 				cadastros(escolha, entrada, listaseguradoras);
 				break;
 			case LISTAR:
 				System.out.println("Para listar clientes aperte: 1\nPara listar sinistros por seguradora aperte: 2");
 				System.out.println("Para listar sinistros por cliente aperte: 3\nPara listar veiculo por cliente aperte: 4\nPara listar veiculo por seguradora aperte: 5\nPara voltar aperte: 6");
-				escolha = entrada.nextInt();
-				entrada.nextLine();
+				escolha = 6;
+				boolean valeu = false;
+				String Sescolha = entrada.nextLine();
+				while(!valeu){
+				try{
+					escolha = Integer.parseInt(Sescolha);
+					valeu = true;
+				} 
+				catch(NumberFormatException e){
+					System.out.println("Entrada invalida, por favor digite um numero:");
+					Sescolha = entrada.nextLine();
+				}
+				}
+				
 				listar(escolha, entrada, listaseguradoras);
 				break;
 			case EXCLUIR:  
 				System.out.println("Para excluir cliente aperte: 1\nPara excluir veiculo aperte: 2\nPara excluir sinistro aperte: 3\nPara voltar aperte: 4");
-				escolha = entrada.nextInt();
-				entrada.nextLine();
+				escolha = 4;
+				String escolhaS = entrada.nextLine();
+				boolean deucerto = false;
+				while(!deucerto){
+				try{
+					escolha = Integer.parseInt(escolhaS);
+					deucerto= true;
+				} 
+				catch(NumberFormatException e){
+					System.out.println("Entrada invalida, por favor digite um numero:");
+					escolhaS = entrada.nextLine();
+				}
+				}
 				excluir(escolha, entrada, listaseguradoras);
 				break;
 			case GERAR_SINISTRO:
@@ -542,8 +639,20 @@ public class AppMain {
 				c1 = Validacao.achaCliente(s1,id1);
 				while(c1 == null){
 					System.out.println("cliente nao encontrado, aperte 5 para tentar de novo e 6 para voltar");
-					int ex = entrada.nextInt();
-					entrada.nextLine();
+					int ex = 6;
+					String exs = entrada.nextLine();
+					boolean foi = false;
+					while(!foi){
+					try{
+						ex = Integer.parseInt(exs);
+						foi = true;
+					} 
+					catch(NumberFormatException e){
+						System.out.println("Entrada invalida, por favor digite um numero:");
+						exs = entrada.nextLine();
+					}
+					}
+					
 					if(ex == 5){
 					id1 = entrada.nextLine();
 					id1 = id1.replaceAll("[^\\d]","");
@@ -559,8 +668,19 @@ public class AppMain {
 				c2 = Validacao.achaCliente(s2,id2);
 				while(c2 == null){
 					System.out.println("cliente nao encontrado, aperte 5 para tentar de novo e 6 para voltar");
-					int ex = entrada.nextInt();
-					entrada.nextLine();
+					int ex = 6;
+					String exs = entrada.nextLine();
+					boolean rolou = false;
+					while(!rolou){
+					try{
+						ex = Integer.parseInt(exs);
+						rolou = true;
+					} 
+					catch(NumberFormatException e){
+						System.out.println("Entrada invalida, por favor digite um numero:");
+						exs = entrada.nextLine();
+					}
+					}
 					if(ex == 5){
 					System.out.println("tente de novo: ");
 					id2 = entrada.nextLine();
@@ -604,15 +724,25 @@ public class AppMain {
 	
 	public static void main(String args[]) throws Exception{
 		obrigacoesdolab();
-		int escolha;
-		Integer quit = 0;
+		int escolha = 0;
+		int quit = 0;
 		Scanner entrada = new Scanner(System.in);
 		LinkedList<Seguradora> listaSeguradoras = new LinkedList<Seguradora>();	
 		do{
 		System.out.println("Ola! Bem vindo ao menu de seguradoras!\nPara cadastrar aperte: 1\nPara listar aperte: 2");
 		System.out.println("Para excluir aperte: 3\nPara gerar sinistro aperte: 4\nPara transferir seguro aperte: 5\nPara sair aperte: 0");
-		escolha = entrada.nextInt();
-		entrada.nextLine();
+		String escolhaS = entrada.nextLine();
+		boolean escolhavalida = false;
+		while(!escolhavalida){
+		try{
+			escolha = Integer.parseInt(escolhaS);
+			escolhavalida = true;
+		} 
+		catch(NumberFormatException e){
+			System.out.println("Entrada invalida, por favor digite um numero:");
+			escolhaS = entrada.nextLine();
+		}
+		}
 		quit = MenuPrincipal(escolha,entrada,listaSeguradoras);
 		} while(quit != 1);
 		entrada.close();
