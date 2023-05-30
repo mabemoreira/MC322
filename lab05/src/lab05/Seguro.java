@@ -8,7 +8,7 @@ public abstract class Seguro {
     private LocalDate dataInicio;
     private LocalDate dataFim;
     private Seguradora seguradora;
-    private HashMap <String, Sinistro> mapaSinistros;
+    private HashMap <Integer, Sinistro> mapaSinistros;
     private HashMap <String, Condutor> mapaCondutores;
     private int valorMensal;
 
@@ -23,7 +23,7 @@ public abstract class Seguro {
         this.dataInicio = dataInicio;
         this.dataFim = dataFim;
         this.seguradora = seguradora;
-        mapaSinistros = new HashMap<String, Sinistro>();
+        mapaSinistros = new HashMap<Integer, Sinistro>();
         mapaCondutores = new HashMap<String, Condutor>();
         // valormensal = calcula valor seguro;
 
@@ -49,10 +49,10 @@ public abstract class Seguro {
     public void setSeguradora(Seguradora seguradora) {
         this.seguradora = seguradora;
     }
-    public HashMap<String, Sinistro> getMapaSinistros() {
+    public HashMap<Integer, Sinistro> getMapaSinistros() {
         return mapaSinistros;
     }
-    public void setMapaSinistros(HashMap<String, Sinistro> mapaSinistros) {
+    public void setMapaSinistros(HashMap<Integer, Sinistro> mapaSinistros) {
         this.mapaSinistros = mapaSinistros;
     }
     public HashMap<String, Condutor> getMapaCondutores() {
@@ -68,4 +68,37 @@ public abstract class Seguro {
         this.valorMensal = valorMensal;
     }
 
+    public boolean autorizarCondutor(Condutor condutor){
+        if(mapaCondutores.containsKey(condutor.getCPF())){
+            System.out.println("Esse condutor jaestá autorizado");
+            return false;
+        }
+        mapaCondutores.put(condutor.getCPF() ,condutor);
+        System.out.println("Condutor autorizado com sucesso");
+        return true;
+    }
+
+    public boolean desautorizarCondutor(String condutor){
+        Condutor conductor = mapaCondutores.remove(condutor);
+        if(conductor == null){
+            System.out.println("Condutor nao pode ser removido");
+        }
+        else
+        System.out.println("Condutor removido com sucesso");
+        return (conductor != null);
+    }
+  
+    public boolean gerarSinistro(LocalDate data, Condutor condutor, String endereco){
+        Sinistro sinistro = new Sinistro(data, endereco, condutor, this);
+        if(mapaSinistros.containsKey(sinistro.getId())){
+            System.out.println("Esse sinistro ja foi gerado"); // so por precaucao ja q os ids sao unicos nunca deve chegar aqui
+            return false;
+        }
+        mapaSinistros.put(sinistro.getId(), sinistro);
+        return true;
+    }
+
+    public abstract int calcularValor(Cliente cliente);
+
+   
 }

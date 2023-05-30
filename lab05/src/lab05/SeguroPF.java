@@ -1,5 +1,5 @@
 package lab05;
-
+import java.time.temporal.ChronoUnit;
 import java.time.LocalDate;
 
 public class SeguroPF extends Seguro{
@@ -27,4 +27,13 @@ public class SeguroPF extends Seguro{
     }
 
 
+
+
+    public int calcularValor(Cliente cliente){
+        ClientePF clientepf = (ClientePF) cliente;
+        LocalDate dataAtual = LocalDate.now();
+        LocalDate aniversario = clientepf.getDataNasc();
+        if(ChronoUnit.YEARS.between(aniversario, dataAtual) < 30)
+            return CalcSeguro.VALOR_BASE * CalcSeguro.FATOR_0_30  * this.getSeguradora().getSinistrosPorCliente().size() // confirmar se o get sinistros condutor é o sinsitro de cada um dos condutores
+    }
 }

@@ -1,6 +1,8 @@
 package lab05;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.lang.StringBuilder;
+import java.time.LocalDate;
 
 public class Seguradora {
     private final String CNPJ;
@@ -9,7 +11,7 @@ public class Seguradora {
     private String endereco;
     private String email;
     private HashMap <String,Cliente> mapaClientes;
-    private HashMap <String,Seguro> mapaSeguro;
+    private HashMap <Integer,Seguro> mapaSeguro;
 
     public Seguradora(String CNPJ, String nome, String telefone, String email, String endereco){
         this.CNPJ = CNPJ;
@@ -18,7 +20,7 @@ public class Seguradora {
         this.email = email;
         this.endereco = endereco;
         mapaClientes = new HashMap <String, Cliente> ();
-        mapaSeguro = new HashMap <String, Seguro> ();
+        mapaSeguro = new HashMap <Integer, Seguro> ();
     }
 
     public String getCNPJ() {
@@ -65,11 +67,55 @@ public class Seguradora {
         this.mapaClientes = mapaClientes;
     }
 
-    public HashMap<String, Seguro> getMapaSeguro() {
+    public HashMap<Integer, Seguro> getMapaSeguro() {
         return mapaSeguro;
     }
 
-    public void setMapaSeguro(HashMap<String, Seguro> mapaSeguro) {
+    public void setMapaSeguro(HashMap<Integer, Seguro> mapaSeguro) {
         this.mapaSeguro = mapaSeguro;
     }
+
+    public String listarClientes(){
+        StringBuilder sb = new StringBuilder();
+        for(Cliente value: mapaClientes.values()){
+            sb.append(value.toString());
+        }
+        if(sb.toString() == ""){
+            System.out.println("Nao ha clientes cadastrados");
+            return null;
+        }
+        else{
+            return sb.toString();
+        }
+    }
+
+
+    public String listarClientes(String tipo){
+        StringBuilder sb = new StringBuilder();
+        for(Cliente value: mapaClientes.values()){
+            if(tipo.toUpperCase() == "PF" && value instanceof ClientePF)
+                sb.append(value.toString());
+            else if(tipo.toUpperCase() == "PJ" && value instanceof ClientePJ)
+                sb.append(value.toString());
+        }
+        if(sb.toString() == ""){
+            System.out.println("Nao ha clientes desse tipo cadastrados");
+            return null;
+        }
+        else{
+            return sb.toString();
+        }
+    }
+
+    public boolean gerarSeguro(LocalDate dataInicio, LocalDate dataFim, Frota frota, ClientePJ cliente){
+        SeguroPJ seguro = new SeguroPJ(frota, cliente, dataInicio, dataFim, this);
+        if(mapaSeguro.containsValue(seguro)){
+            System.out.println("Seguro ja cadastrado");
+            return false;
+        }
+        mapaSeguro.put(seguro.getId(),seguro);
+        System.out.println("Seguro cadastrado com sucesso");
+        return true;
+    }
+
 }
