@@ -1,6 +1,7 @@
 package lab05;
 import java.time.LocalDate;  
 import java.util.HashMap;
+import java.lang.StringBuilder;
 
 
 public class ClientePF extends Cliente{
@@ -63,7 +64,20 @@ public class ClientePF extends Cliente{
         return(veiculo != null);
     }
 
+    public String listarVeiculos(){
+        StringBuilder sb = new StringBuilder();
+        for(Veiculo value : mapaVeiculos.values()){
+            sb.append(value.toString());
+        }
+        if(sb.toString() == ""){
+            System.out.println("nao ha veiculos");
+            return null;}
+        return sb.toString();
+    }
+
+   
     public String toString(){
-        return "o cliente de nome " + this.getNome() + " possui o cpf " + CPF + " se identifica com o genero "+ genero + " possui nivel de educacao " + educacao + "mora em " + endereco +  
+        return "o cliente de nome " + this.getNome() + " possui o cpf " + CPF + " se identifica com o genero "+ genero + " possui nivel de educacao " + educacao + " mora em " + this.getEndereco() + 
+        " nasceu em " + dataNasc + " e possui os seguintes veiculos " + this.listarVeiculos();
     }
 }

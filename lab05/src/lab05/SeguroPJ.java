@@ -1,5 +1,8 @@
 package lab05;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+
 public class SeguroPJ extends Seguro{
     private Frota frota;
     private ClientePJ cliente;
@@ -25,6 +28,17 @@ public class SeguroPJ extends Seguro{
 
     public void setCliente(ClientePJ cliente) {
         this.cliente = cliente;
+    }
+
+    public double calcularValor(Cliente cliente){
+        ClientePJ clientepj = (ClientePJ) cliente;
+        LocalDate dataAtual = LocalDate.now();
+        LocalDate dataFund = clientepj.getDataFund();
+        int qtdfunc = this.getMapaCondutores().size();
+        int qtdveiculos = frota.getMapaVeiculos().size();
+        ArrayList <Integer> pair = numeroSinistros();
+        return (CalcSeguro.VALOR_BASE.getFator() * ( 10 + (qtdfunc)/10.0) * (1 + 1/(qtdveiculos + 2.0)) * (1 + 1 / (ChronoUnit.YEARS.between(dataFund, dataAtual) + 2.0))
+        *(2 + (pair.get(0)/10.0)) * ( 5 + (pair.get(1)/10.0)) );
     }
 }
 

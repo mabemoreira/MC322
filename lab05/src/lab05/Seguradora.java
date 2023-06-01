@@ -118,4 +118,6 @@ public class Seguradora {
         return true;
     }
 
+
+
 }

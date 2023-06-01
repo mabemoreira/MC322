@@ -1,6 +1,7 @@
 package lab05;
 import java.time.LocalDate;  // finalmente descobri que nao estava no java.util
 import java.util.HashMap; 
+import java.util.ArrayList;
 
 public abstract class Seguro {
     private static int contador = 0;
@@ -25,7 +26,7 @@ public abstract class Seguro {
         this.seguradora = seguradora;
         mapaSinistros = new HashMap<Integer, Sinistro>();
         mapaCondutores = new HashMap<String, Condutor>();
-        // valormensal = calcula valor seguro;
+        valorMensal = 0;
 
     }
     public int getId() {
@@ -98,7 +99,18 @@ public abstract class Seguro {
         return true;
     }
 
-    public abstract int calcularValor(Cliente cliente);
+    public ArrayList<Integer> numeroSinistros(){
+        ArrayList<Integer> pair = new ArrayList<>();
+        pair.add(0, mapaSinistros.size());
+        int condnum = 0;
+        for(Condutor cond: mapaCondutores.values()){
+            condnum += cond.getMapaSinistros().size();
+        }
+        pair.add(1, condnum);
+        return pair;
+    }
+
+    public abstract double calcularValor(Cliente cliente);
 
    
 }
