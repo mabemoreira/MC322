@@ -1,6 +1,7 @@
 package lab05;
 import java.time.LocalDate;  
-import java.util.HashMap; 
+import java.util.HashMap;
+
 
 public class ClientePF extends Cliente{
     private final String CPF;
@@ -44,5 +45,25 @@ public class ClientePF extends Cliente{
     }
     public void setMapaVeiculos(HashMap<String, Veiculo> mapaVeiculos) {
         this.mapaVeiculos = mapaVeiculos;
+    }
+
+    public boolean cadastrarVeiculo(Veiculo veiculo){
+        if(mapaVeiculos.containsValue(veiculo)){
+            System.out.println("veiculo ja cadastrado");
+            return false;
+        }
+        mapaVeiculos.put(veiculo.getPlaca(), veiculo);
+        return true;
+    }
+
+    public boolean removerVeiculo(String placa){
+        Veiculo veiculo = mapaVeiculos.remove(placa);
+        String resultado = veiculo == null ? "Veiculo nao encontrado" : "Veiculo removido com sucesso";
+        System.out.println(resultado);
+        return(veiculo != null);
+    }
+
+    public String toString(){
+        return "o cliente de nome " + this.getNome() + " possui o cpf " + CPF + " se identifica com o genero "+ genero + " possui nivel de educacao " + educacao + "mora em " + endereco +  
     }
 }
