@@ -1,6 +1,7 @@
 package lab05;
 import java.util.HashMap; 
 
+
 public class Frota {
     private String code;
     private HashMap <String, Veiculo> mapaVeiculos;

@@ -38,7 +38,7 @@ public class ClientePJ extends Cliente{
     }
 
     public boolean cadastrarFrota(Frota frota){
-        if(mapaFrotas.containsValue(frota)){
+        if(mapaFrotas.containsValue(frota)){ // garante unicidade de codigos
             System.out.println("frota ja cadastrada");
             return false;
         }
