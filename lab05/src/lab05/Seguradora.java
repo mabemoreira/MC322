@@ -80,7 +80,7 @@ public class Seguradora {
         for(Cliente value: mapaClientes.values()){
             sb.append(value.toString());
         }
-        if(sb.toString() == ""){
+        if(sb.toString().equals("")){
             System.out.println("Nao ha clientes cadastrados");
             return null;
         }
@@ -93,13 +93,13 @@ public class Seguradora {
     public String listarClientes(String tipo){
         StringBuilder sb = new StringBuilder();
         for(Cliente value: mapaClientes.values()){
-            if(tipo.toUpperCase() == "PF" && value instanceof ClientePF)
+            if(tipo.toUpperCase().equals("PF") && value instanceof ClientePF)
                 sb.append(value.toString());
-            else if(tipo.toUpperCase() == "PJ" && value instanceof ClientePJ)
+            else if(tipo.toUpperCase().equals("PJ") && value instanceof ClientePJ)
                 sb.append(value.toString());
                 sb.append("\n");
         }
-        if(sb.toString() == ""){
+        if(sb.toString().equals("")){
             System.out.println("Nao ha clientes desse tipo cadastrados");
             return null;
         }
@@ -152,7 +152,7 @@ public class Seguradora {
 }
 
     public boolean removerCliente (String cliente){
-        if(!(mapaClientes.containsKey(cliente))){
+        if(!(mapaClientes.containsKey(cliente.replaceAll("[^0-9]", "")))){
             System.out.println("Cliente nao cadastrado");
             return false;
         }
@@ -161,23 +161,23 @@ public class Seguradora {
     }
 
     public LinkedList <Seguro> getSegurosPorCliente(String cliente, String tipo){
-        cliente = cliente.replaceAll("[^\\d]","");
+        String novocliente = cliente.replaceAll("[^0-9]", "");
         LinkedList <Seguro> lista = new LinkedList<Seguro>();
-        if(tipo == "PF"){
+        if(tipo.toUpperCase().equals("PF")){
             for(Seguro value: mapaSeguro.values()){
                 if(value instanceof SeguroPF){
                    SeguroPF seguropf = (SeguroPF)value;
-                   if(seguropf.getCliente().getCPF() == cliente){
+                   if(seguropf.getCliente().getCPF().equals(novocliente)){
                         lista.add(seguropf);
                    }
                 }
             }
         }
-        else if(tipo == "PJ"){
+        else if(tipo.toUpperCase().equals("PJ")){
             for(Seguro value: mapaSeguro.values()){
                 if(value instanceof SeguroPJ){
                    SeguroPJ seguropj = (SeguroPJ)value;
-                   if(seguropj.getCliente().getCNPJ() == cliente){
+                   if(seguropj.getCliente().getCNPJ().equals(novocliente)){
                         lista.add(seguropj);
                    }
                 }
@@ -191,10 +191,11 @@ public class Seguradora {
     }
 
    public LinkedList <Sinistro> getSinistrosporCliente(String cliente){
+        String novocliente = cliente.replaceAll("[^0-9]", "");
         LinkedList <Sinistro> lista = new LinkedList<Sinistro>();
         for(Seguro value: mapaSeguro.values()){
             for(Sinistro sin : value.getMapaSinistros().values()){
-                if(sin.getCondutor().getCPF() == cliente){
+                if(sin.getCondutor().getCPF() == novocliente){
                     lista.add(sin);
                 }
             }
@@ -217,11 +218,11 @@ public class Seguradora {
 
         public boolean cancelarSeguro(int a, String id, String tipo){ // int so ta ai pra diferenciar os metodos
             boolean flag = false;
-            if(tipo == "PF"){
+            if(tipo.toUpperCase().equals("PF")){
                 for(Seguro value: mapaSeguro.values()){
                     if(value instanceof SeguroPF){
                         SeguroPF seguropf = (SeguroPF) value;
-                        if(seguropf.getVeiculo().getPlaca() == id){
+                        if(seguropf.getVeiculo().getPlaca() == id.toUpperCase()){
                             flag = true;
                             mapaSeguro.remove(seguropf.getId());
                         }
@@ -232,7 +233,7 @@ public class Seguradora {
                 for(Seguro valor: mapaSeguro.values()){
                     if(valor instanceof SeguroPJ){
                         SeguroPJ seguropj = (SeguroPJ) valor;
-                        if(seguropj.getFrota().getCode() == id){
+                        if(seguropj.getFrota().getCode() == id.toUpperCase()){
                             flag = true;
                             mapaSeguro.remove(seguropj.getId());
                         }
@@ -249,22 +250,22 @@ public class Seguradora {
 
         public boolean cancelarSeguro(String cliente, String tipo){
             boolean flag = false;
-            if(tipo == "PF"){
+            if(tipo.toUpperCase().equals("PF")){
                 for(Seguro value: mapaSeguro.values()){
                     if(value instanceof SeguroPF){
                         SeguroPF seguropf = (SeguroPF) value;
-                        if(seguropf.getCliente().getCPF() == cliente){
+                        if(seguropf.getCliente().getCPF() == cliente.replaceAll("[^0-9]", "")){
                             flag = true;
                             mapaSeguro.remove(seguropf.getId());
                         }
                     }
                 }
             }
-            else if(tipo == "PJ"){
+            else if(tipo.toUpperCase().equals("PJ")){
                 for(Seguro valor: mapaSeguro.values()){
                     if(valor instanceof SeguroPJ){
                         SeguroPJ seguropj = (SeguroPJ) valor;
-                        if(seguropj.getCliente().getCNPJ() == cliente){
+                        if(seguropj.getCliente().getCNPJ() == cliente.replaceAll("[^0-9]", "")){
                             flag = true;
                             mapaSeguro.remove(seguropj.getId());
                         }
@@ -285,7 +286,7 @@ public class Seguradora {
                 sb.append(value.toString());
                 sb.append("\n");
             }
-            if(sb.toString() == ""){
+            if(sb.toString().equals("")){
                 System.out.println("Nao ha seguros cadastrados");
                 return null;
             }

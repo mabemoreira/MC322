@@ -6,7 +6,10 @@ public enum MenuExcluir {
 	SINISTRO(3),
     FROTA(4),
     UMVEICULOFROTA(5),
-	VOLTAR(6);
+	SEGURO(6),
+	TODOSSEGCLIENTE(7),
+	CONDUTOR(8),
+	VOLTAR(9);
 	
 
 public final int operacao;

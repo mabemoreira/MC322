@@ -73,7 +73,7 @@ public abstract class Seguro {
 
     public boolean autorizarCondutor(Condutor condutor){
         if(mapaCondutores.containsKey(condutor.getCPF())){
-            System.out.println("Esse condutor jaestá autorizado");
+            System.out.println("Esse condutor ja esta autorizado");
             return false;
         }
         mapaCondutores.put(condutor.getCPF() ,condutor);
@@ -83,14 +83,15 @@ public abstract class Seguro {
     }
 
     public boolean desautorizarCondutor(String condutor){
-        Condutor conductor = mapaCondutores.remove(condutor);
+        Condutor conductor = mapaCondutores.remove(condutor.replaceAll("[^0-9]", ""));
         if(conductor == null){
             System.out.println("Condutor nao pode ser removido");
+            return false;
         }
         else
         corrigeValor();
         System.out.println("Condutor removido com sucesso");
-        return (conductor != null);
+        return true;
     }
   
     public boolean gerarSinistro(LocalDate data, Condutor condutor, String endereco){
@@ -105,16 +106,18 @@ public abstract class Seguro {
 
     public ArrayList<Integer> numeroSinistros(){
         ArrayList<Integer> pair = new ArrayList<>();
-        if(mapaSinistros.size() == 0){
-            for( int i = 0; i < 2; i++){
-                pair.add(i,0);
-            }
-            return pair;
+        if (mapaSinistros.size() == 0){
+            pair.add(0,0);
         }
-        pair.add(0, mapaSinistros.size());
+        else 
+            pair.add(0, mapaSinistros.size());
         int condnum = 0;
         for(Condutor cond: mapaCondutores.values()){
-            condnum += cond.getMapaSinistros().size();
+            if(cond.getMapaSinistros() == null){
+                continue;
+            }
+            else 
+                condnum += cond.getMapaSinistros().size();
         }
         pair.add(1, condnum);
         return pair;
@@ -126,9 +129,9 @@ public abstract class Seguro {
                 sb.append(value.toString());
                 sb.append("\n");
             }
-            if(sb.toString() == ""){
-                System.out.println("Nao ha condutores");
-                return null;
+            System.out.println(sb);
+            if(sb.toString().equals("")){
+                return("Nao ha condutores");
             }
             else{
                 return sb.toString();

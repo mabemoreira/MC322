@@ -8,7 +8,7 @@ public class Veiculo {
 
 
     public Veiculo(String placa, String marca, String modelo, int anoFabricacao){
-        this.placa = placa;
+        this.placa = placa.toUpperCase();
         this.marca = marca;
         this.modelo = modelo;
         this.anoFabricacao = anoFabricacao;

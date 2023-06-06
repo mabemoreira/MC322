@@ -67,7 +67,7 @@ public class SeguroPF extends Seguro{
     }
 
     public String toString(){
-        return " o seguro de id " + this.getId() + " com inicio em " + this.getDataInicio() + this.getDataFim() + " cobre o seguinte veiculo " + veiculo +
+        return " o seguro de id " + this.getId() + " com inicio em " + this.getDataInicio() + " e fim em " + this.getDataFim() + " cobre o seguinte veiculo " + veiculo +
         " que pertence ao seguinte cliente " + cliente + " e possui os seguintes condutores " + this.listarCondutores();
     }
 }

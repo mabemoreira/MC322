@@ -11,7 +11,7 @@ public class ClientePJ extends Cliente{
 
     public ClientePJ(String CNPJ, LocalDate dataFund,  String nome, String endereco, String telefone, String email){
         super(nome, telefone, endereco, email);
-        this.CNPJ = CNPJ.replaceAll("[^\\d]","");
+        this.CNPJ = CNPJ.replaceAll("[^0-9]", "");
         this.dataFund = dataFund;
         mapaFrotas = new HashMap <String, Frota> ();
     }
@@ -111,7 +111,7 @@ public class ClientePJ extends Cliente{
                 sb.append(value.toString());
                 sb.append("\n");
             }
-            if(sb.toString() == ""){
+            if(sb.toString().equals("")){
                 System.out.println("Nao ha frotas");
                 return null;
             }

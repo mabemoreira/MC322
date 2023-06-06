@@ -5,11 +5,13 @@ public enum MenuListar {
 	SINISTRO_SEG(2),
 	SINISTRO_CLIENTE(3),
 	VEICULO_CLIENTE(4),
-	VEICULO_SEGURADORA(5),
+	SEGUROS_SEG(5),
     VEICULO_FROTA(7),
     SEGUROS_CLIENTE(8),
-	VOLTAR(9);
-	
+	FROTA_CLIENTE(9),
+	CONDUTOR_SEG(10),
+	VOLTAR(11);
+
 public final int operacao;
 	
 	MenuListar(int operacao){

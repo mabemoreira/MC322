@@ -45,7 +45,7 @@ public class Frota {
         for(Veiculo value : mapaVeiculos.values()){
             sb.append(value.toString());
         }
-        if(sb.toString() == ""){
+        if(sb.toString().equals("")){
             System.out.println("nao ha veiculos");
             return null;}
         return sb.toString(); // se eu tivesse tempo eu teria feito uma interface pra todos esses listar add e remover

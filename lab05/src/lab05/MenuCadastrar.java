@@ -5,7 +5,10 @@ package lab05;
         VEICULO(2),
         SEGURADORA(3),
         FROTA(4),
-        VOLTAR(5);
+        UMVEICULOFROTA(5),
+        SEGURO(6),
+        CONDUTOR(7),
+        VOLTAR(8);
         
     public final int operacao;
         
