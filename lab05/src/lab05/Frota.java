@@ -39,6 +39,22 @@ public class Frota {
         System.out.println(resultado);
         return(veiculo != null);
     }
+
+    public String listarVeiculos(){
+        StringBuilder sb = new StringBuilder();
+        for(Veiculo value : mapaVeiculos.values()){
+            sb.append(value.toString());
+        }
+        if(sb.toString() == ""){
+            System.out.println("nao ha veiculos");
+            return null;}
+        return sb.toString(); // se eu tivesse tempo eu teria feito uma interface pra todos esses listar add e remover
+    }
+
+    public String toString(){
+        return "a frota de codigo " + code + " possui os seguintes veiculos " + this.listarVeiculos();
+    }
+
 }
 
 

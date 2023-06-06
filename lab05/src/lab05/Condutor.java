@@ -10,10 +10,10 @@ public class Condutor {
     private String endereco;
     private String email;
     private LocalDate dataNasc;
-    private HashMap <String, Sinistro> mapaSinistros;
+    private HashMap <Integer, Sinistro> mapaSinistros;
 
     public Condutor(String CPF, String nome, String telefone, String endereco, String email, LocalDate dataNasc){
-        this.CPF = CPF;
+        this.CPF = CPF.replaceAll("[^\\d]","");;
         this.nome = nome;
         this.telefone = telefone;
         this.endereco = endereco;
@@ -55,10 +55,23 @@ public class Condutor {
     public void setDataNasc(LocalDate dataNasc) {
         this.dataNasc = dataNasc;
     }
-    public HashMap<String, Sinistro> getMapaSinistros() {
+    public HashMap<Integer, Sinistro> getMapaSinistros() {
         return mapaSinistros;
     }
-    public void setMapaSinistros(HashMap<String, Sinistro> mapaSinistros) {
+    public void setMapaSinistros(HashMap<Integer, Sinistro> mapaSinistros) {
         this.mapaSinistros = mapaSinistros;
+    }
+
+    public boolean adicionarSinistro(LocalDate data, String endereco, Seguro seguro){
+        Sinistro sinistro = new Sinistro(data, endereco, this, seguro);
+        mapaSinistros.put(sinistro.getId(),sinistro);
+        seguro.corrigeValor();
+        System.out.println("Sinistro cadastrado com sucesso");
+        return true;
+    }
+
+    public String toString(){
+        return "o condutor " + nome + " possui o cpf " + CPF + " nascido no dia " + dataNasc + " reside em " + endereco + " possui o email " + email + " e telefone "
+        + telefone;
     }
 }

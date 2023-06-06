@@ -13,7 +13,7 @@ public class ClientePF extends Cliente{
 
     public ClientePF(String nome, String endereco, String telefone, String email, String CPF, String genero, String educacao, LocalDate dataNasc){
         super(nome, telefone, endereco, email);
-        this.CPF = CPF;
+        this.CPF = CPF.replaceAll("[^\\d]","");;
         this.genero = genero;
         this.educacao = educacao;
         this.dataNasc = dataNasc;

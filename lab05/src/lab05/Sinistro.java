@@ -52,5 +52,7 @@ public class Sinistro {
         this.seguro = seguro;
     }
 
-
+    public String toString(){
+        return "o sinistro de id " + id + " ocorreu em " + data + " no endereco " + endereco + " envolvendo o condutor " + condutor;
+    }
 }

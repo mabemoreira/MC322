@@ -40,6 +40,15 @@ public class SeguroPJ extends Seguro{
         return (CalcSeguro.VALOR_BASE.getFator() * ( 10 + (qtdfunc)/10.0) * (1 + 1/(qtdveiculos + 2.0)) * (1 + 1 / (ChronoUnit.YEARS.between(dataFund, dataAtual) + 2.0))
         *(2 + (pair.get(0)/10.0)) * ( 5 + (pair.get(1)/10.0)) );
     }
+
+    public void corrigeValor(){
+        this.setValorMensal(calcularValor(cliente));
+    }
+
+    public String toString(){
+        return " o seguro de id " + this.getId() + " com inicio em " + this.getDataInicio() + this.getDataFim() + " cobre a seguinte frota " + frota +
+        " que pertence ao seguinte cliente " + cliente + " e possui os seguintes condutores " + this.listarCondutores();
+    }
 }
 
 

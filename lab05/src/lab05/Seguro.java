@@ -11,7 +11,7 @@ public abstract class Seguro {
     private Seguradora seguradora;
     private HashMap <Integer, Sinistro> mapaSinistros;
     private HashMap <String, Condutor> mapaCondutores;
-    private int valorMensal;
+    private double valorMensal;
 
     public Seguro(){
         id = -1;
@@ -62,12 +62,14 @@ public abstract class Seguro {
     public void setMapaCondutores(HashMap<String, Condutor> mapaCondutores) {
         this.mapaCondutores = mapaCondutores;
     }
-    public int getValorMensal() {
+    public double getValorMensal() {
         return valorMensal;
     }
-    public void setValorMensal(int valorMensal) {
+    public void setValorMensal(double valorMensal) {
         this.valorMensal = valorMensal;
     }
+
+    public abstract void corrigeValor();
 
     public boolean autorizarCondutor(Condutor condutor){
         if(mapaCondutores.containsKey(condutor.getCPF())){
@@ -75,6 +77,7 @@ public abstract class Seguro {
             return false;
         }
         mapaCondutores.put(condutor.getCPF() ,condutor);
+        corrigeValor();
         System.out.println("Condutor autorizado com sucesso");
         return true;
     }
@@ -85,6 +88,7 @@ public abstract class Seguro {
             System.out.println("Condutor nao pode ser removido");
         }
         else
+        corrigeValor();
         System.out.println("Condutor removido com sucesso");
         return (conductor != null);
     }
@@ -101,6 +105,12 @@ public abstract class Seguro {
 
     public ArrayList<Integer> numeroSinistros(){
         ArrayList<Integer> pair = new ArrayList<>();
+        if(mapaSinistros.size() == 0){
+            for( int i = 0; i < 2; i++){
+                pair.add(i,0);
+            }
+            return pair;
+        }
         pair.add(0, mapaSinistros.size());
         int condnum = 0;
         for(Condutor cond: mapaCondutores.values()){
@@ -109,6 +119,22 @@ public abstract class Seguro {
         pair.add(1, condnum);
         return pair;
     }
+
+    public String listarCondutores(){
+        StringBuilder sb = new StringBuilder();
+            for(Condutor value: mapaCondutores.values()){
+                sb.append(value.toString());
+                sb.append("\n");
+            }
+            if(sb.toString() == ""){
+                System.out.println("Nao ha condutores");
+                return null;
+            }
+            else{
+                return sb.toString();
+            }
+        }
+    
 
     public abstract double calcularValor(Cliente cliente);
 

@@ -11,7 +11,7 @@ public class ClientePJ extends Cliente{
 
     public ClientePJ(String CNPJ, LocalDate dataFund,  String nome, String endereco, String telefone, String email){
         super(nome, telefone, endereco, email);
-        this.CNPJ = CNPJ;
+        this.CNPJ = CNPJ.replaceAll("[^\\d]","");
         this.dataFund = dataFund;
         mapaFrotas = new HashMap <String, Frota> ();
     }
@@ -103,6 +103,26 @@ public class ClientePJ extends Cliente{
             System.out.println("Nao ha veiculos cadastrados nessa frota");
         }
         return true; // deixei true como consegui acessar a frota independentemente de ter veiculo ou nao
+    }
+
+    public String listarFrotas(){
+        StringBuilder sb = new StringBuilder();
+            for(Frota value: mapaFrotas.values()){
+                sb.append(value.toString());
+                sb.append("\n");
+            }
+            if(sb.toString() == ""){
+                System.out.println("Nao ha frotas");
+                return null;
+            }
+            else{
+                return sb.toString();
+            }
+        }
+
+    public String toString(){
+        return "o cliente PJ de nome " + this.getNome() + " possui telefone " + this.getTelefone() + " e endereco " + this.getEndereco() + " e email "
+        + this.getEmail() + " alem de cnpj " + CNPJ + " foi fundado em " + dataFund + " e possui as seguintes frotas " + this.listarFrotas();
     }
    
 }

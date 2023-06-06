@@ -14,7 +14,7 @@ public class Seguradora {
     private HashMap <Integer,Seguro> mapaSeguro;
 
     public Seguradora(String CNPJ, String nome, String telefone, String email, String endereco){
-        this.CNPJ = CNPJ;
+        this.CNPJ = CNPJ.replaceAll("[^\\d]","");
         this.nome = nome;
         this.telefone = telefone;
         this.email = email;
@@ -115,6 +115,7 @@ public class Seguradora {
             return false;
         }
         mapaSeguro.put(seguro.getId(),seguro);
+        seguro.corrigeValor();
         System.out.println("Seguro cadastrado com sucesso");
         return true;
     }
@@ -126,6 +127,7 @@ public class Seguradora {
             return false;
         }
         mapaSeguro.put(seguro.getId(), seguro);
+        seguro.corrigeValor();
         System.out.println("Seguro cadastrado com sucesso");
         return true;
     }
@@ -159,6 +161,7 @@ public class Seguradora {
     }
 
     public LinkedList <Seguro> getSegurosPorCliente(String cliente, String tipo){
+        cliente = cliente.replaceAll("[^\\d]","");
         LinkedList <Seguro> lista = new LinkedList<Seguro>();
         if(tipo == "PF"){
             for(Seguro value: mapaSeguro.values()){
@@ -293,6 +296,6 @@ public class Seguradora {
 
         public String toString(){
             return "a seguradora " + nome + " de CNPJ " + CNPJ + " localizada em " + endereco + " possui o telefone " + telefone + " e o email " + email + " possui os " 
-           + " seguintes clientes : " + this.listarClientes() + " e os seguintes seguros " + this.listarSeguros();
+           + " seguintes clientes : " + this.listarClientes() + " e os seguintes seguros " + this.listarSeguros() + " possuindo uma receita de " + this.calcularReceita();
         }
 }
