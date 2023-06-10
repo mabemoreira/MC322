@@ -1,3 +1,0 @@
-INDEX VERSION 1.131
-file:/home/mabemoreira/MC322/.metadata/.plugins/org.eclipse.jdt.core/1865797976.index
-meta_index
