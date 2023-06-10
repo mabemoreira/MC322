@@ -101,6 +101,7 @@ public abstract class Seguro {
             return false;
         }
         mapaSinistros.put(sinistro.getId(), sinistro);
+        condutor.getMapaSinistros().put(sinistro.getId(), sinistro);
         return true;
     }
 
@@ -129,13 +130,7 @@ public abstract class Seguro {
                 sb.append(value.toString());
                 sb.append("\n");
             }
-            System.out.println(sb);
-            if(sb.toString().equals("")){
-                return("Nao ha condutores");
-            }
-            else{
-                return sb.toString();
-            }
+          return sb.toString().equals("")? "nao ha condutores" : sb.toString();
         }
     
 

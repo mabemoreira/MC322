@@ -52,9 +52,9 @@ public class Validacao {
 	}
 	
 	public static boolean validarCPF(String cpfTeste) {
+		cpfTeste = cpfTeste.replaceAll("[^\\d]","");
 		char base = cpfTeste.charAt(0);
 		int cont = 1, primeiroDigito, segundoDigito, digitoParcial, a, b;
-		cpfTeste = cpfTeste.replaceAll("[^\\d]","");
 		if(cpfTeste.length() != 11)
 			return false;
 		for(int i = 1; i < 11; i++) { // acredito que um cpf completamente igual nao passaria no teste numerico, mas o lab pedia especificamente para testar se todos eram iguais
@@ -111,19 +111,19 @@ public class Validacao {
 		}
 		
 
-	private static Seguradora haSeg(LinkedList<Seguradora> listasegs, String nomeseg){
+	private static Seguradora haSeg(LinkedList<Seguradora> listasegs, String cnpjseg){
 		Seguradora seg = null;
 			for(Seguradora s: listasegs){
-				if(s.getNome().equals(nomeseg.toLowerCase())){
+				if(s.getCNPJ().equals(cnpjseg.replaceAll("[^\\d]",""))){
 					seg = s;
 				}
 			}
 			return seg;
 	}
 
-	public static Seguradora haSist(LinkedList<Seguradora> listasegs, String nomeseg, Scanner entrada){
+	public static Seguradora haSist(LinkedList<Seguradora> listasegs, String cnpjseg, Scanner entrada){
 		Seguradora seg = null;
-		seg = haSeg(listasegs, nomeseg);
+		seg = haSeg(listasegs, cnpjseg);
 		while(seg == null){
 			System.out.println("Nao ha essa seguradora no sistema, aperte 5 para digitar outro nome ou 6 para voltar");
 					int esc = entrada.nextInt();
@@ -132,8 +132,8 @@ public class Validacao {
 						return null;
 					else if(esc == 5){
 						System.out.println("digite o novo nome: ");
-						nomeseg = entrada.nextLine();
-						seg = Validacao.haSeg(listasegs, nomeseg);
+						cnpjseg = entrada.nextLine();
+						seg = Validacao.haSeg(listasegs, cnpjseg);
 					}
 		}
 		return seg; // fiz isso pra nao dar null pointer no calcula receita 
@@ -199,5 +199,78 @@ public static boolean validaData(String data){
 	return true;
 }
 
+public static Veiculo encontraCarro(ClientePF cliente, String placa) {
+			Veiculo veiculo = null;
+			for(Veiculo valor: cliente.getMapaVeiculos().values()) {
+				if(valor.getPlaca().equals(placa.toUpperCase()))
+					veiculo = valor;
+			}
+			return veiculo;
+		}
+
+
+
+
+		public static SeguroPF achaSeguroPF(Seguradora seguradora, Veiculo veiculo){
+			SeguroPF seg = null;
+			for(Seguro value: seguradora.getMapaSeguro().values()){
+				if(value instanceof SeguroPF){
+					SeguroPF seguroPF = (SeguroPF) value;
+					if(seguroPF.getVeiculo() == veiculo){
+						seg = seguroPF;
+						break;
+					}
+				}
+			}
+			return seg;
+		}
+
+		public static SeguroPJ achaSeguroPJ(Seguradora seguradora, Frota frota){
+			SeguroPJ seg = null;
+			for(Seguro value: seguradora.getMapaSeguro().values()){
+				if(value instanceof SeguroPJ){
+					SeguroPJ seguroPJ = (SeguroPJ) value;
+					if(seguroPJ.getFrota() == frota){
+						seg = seguroPJ;
+						break;
+					}
+				}
+			}
+			return seg;
+		}
+
+
+		public static Condutor encontraCondutor(Seguro seguro, String CPF){
+			Condutor cond = null;
+			for(Condutor value: seguro.getMapaCondutores().values()){
+				if(value.getCPF().equals(CPF.replaceAll("[^\\d]",""))){
+					cond = value;
+					break;
+				}
+			}
+			return cond;
+		}
+
+		public static boolean temPJ(Seguradora seguradora){
+			boolean tem = false;
+			for(Cliente value: seguradora.getMapaClientes().values()){
+				if(value instanceof ClientePJ)
+					tem = true;
+			}
+			return tem;
+		}
+
+		public static boolean temPF(Seguradora seguradora){
+			boolean tem = false;
+			for(Cliente value: seguradora.getMapaClientes().values()){
+				if(value instanceof ClientePF)
+					tem = true;
+			}
+			return tem;
+		}
    
 }
+
+
+
+

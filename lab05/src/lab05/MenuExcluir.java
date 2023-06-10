@@ -3,13 +3,12 @@ package lab05;
 public enum MenuExcluir {
     CLIENTE(1),
 	VEICULO(2),
-	SINISTRO(3),
-    FROTA(4),
-    UMVEICULOFROTA(5),
-	SEGURO(6),
-	TODOSSEGCLIENTE(7),
-	CONDUTOR(8),
-	VOLTAR(9);
+    FROTA(3),
+    UMVEICULOFROTA(4),
+	SEGURO(5),
+	TODOSSEGCLIENTE(6),
+	CONDUTOR(7),
+	VOLTAR(8);
 	
 
 public final int operacao;

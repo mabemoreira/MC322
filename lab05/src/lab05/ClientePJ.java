@@ -111,13 +111,7 @@ public class ClientePJ extends Cliente{
                 sb.append(value.toString());
                 sb.append("\n");
             }
-            if(sb.toString().equals("")){
-                System.out.println("Nao ha frotas");
-                return null;
-            }
-            else{
-                return sb.toString();
-            }
+         return sb.toString().equals("") ?  "nao ha frotas" : sb.toString();
         }
 
     public String toString(){

@@ -19,6 +19,7 @@ public class Condutor {
         this.endereco = endereco;
         this.email = email;
         this.dataNasc = dataNasc;
+        mapaSinistros = new HashMap<Integer, Sinistro>();
     }
 
 

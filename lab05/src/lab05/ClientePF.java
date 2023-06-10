@@ -69,10 +69,7 @@ public class ClientePF extends Cliente{
         for(Veiculo value : mapaVeiculos.values()){
             sb.append(value.toString());
         }
-        if(sb.toString().equals("")){
-            System.out.println("nao ha veiculos");
-            return null;}
-        return sb.toString();
+       return sb.toString().equals("")? "cliente nao possui veiculos" : sb.toString();
     }
 
    
